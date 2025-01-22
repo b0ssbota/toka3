@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 text-light" style="background-image: url('{% static 'imgs/background.jpg' %}'); background-size: cover; background-position: center;">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <!-- Sign-Up Form -->
+            <div class="col-md-6 col-lg-5">
+                <div class="card bg-dark text-light border border-secondary">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4">Sign Up</h2>
+                        <form method="post" action="{% url 'register' %}">
+                            {% csrf_token %}
+                            <!-- Name Field -->
+                            <div class="mb-3">
+                                <label for="id_name" class="form-label">Name</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="id_name" 
+                                    name="username" 
+                                    placeholder="Enter your name" 
+                                    required
+                                >
+                            </div>
+                            <!-- Email Field -->
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label">Email</label>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="id_email" 
+                                    name="email" 
+                                    placeholder="Enter your email" 
+                                    required
+                                >
+                            </div>
+                            <!-- Password Field -->
+                            <div class="mb-3">
+                                <label for="id_password" class="form-label">Password</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="id_password" 
+                                    name="password" 
+                                    placeholder="Create a password" 
+                                    required
+                                >
+                            </div>
+                            <!-- Confirm Password Field -->
+                            <div class="mb-3">
+                                <label for="id_confirm_password" class="form-label">Confirm Password</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="id_confirm_password" 
+                                    name="confirm_password" 
+                                    placeholder="Re-enter your password" 
+                                    required
+                                >
+                            </div>
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-warning w-100">Sign Up</button>
+                        </form>
+                        <hr class="my-4">
+                        <!-- Login Link -->
+                        <p class="text-center mb-0">
+                            Already have an account? <a href="{% url 'login' %}" class="text-warning text-decoration-none">Login here</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
