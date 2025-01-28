@@ -1,6 +1,6 @@
 from django.http import HttpResponse,HttpResponseRedirect
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate, login, logout 
 from .forms import LoginForm, SignupForm
 from django.contrib.auth.models import User
 from .models import WorkoutClass
@@ -56,3 +56,7 @@ def login_view(request):
 def workout_list(request):
     workouts = WorkoutClass.objects.all()
     return render(request, 'workoutclass.html', {'workouts': workouts})
+
+def workout_detail(request, id):
+    workout = get_object_or_404(WorkoutClass, id=id)
+    return render(request, "workouts/detail.html",{"workout":workout})
