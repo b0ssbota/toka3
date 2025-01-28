@@ -55,8 +55,9 @@ def login_view(request):
 
 def workout_list(request):
     workouts = WorkoutClass.objects.all()
-    return render(request, 'workoutclass.html', {'workouts': workouts})
+    is_member = request.user.is_authenticated and request.user.groups.filter(name='Members').exists()  # Check membership
+    return render(request, 'workoutclass.html', {'workouts': workouts, 'is_member': is_member})
 
 def workout_detail(request, id):
     workout = get_object_or_404(WorkoutClass, id=id)
-    return render(request, "workouts/detail.html",{"workout":workout})
+    return render(request, "workoutclassindividual.html",{"workout":workout})
