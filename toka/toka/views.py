@@ -2,7 +2,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout 
 from .forms import LoginForm, SignupForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from .models import WorkoutClass
 
 def home(request):
@@ -17,6 +17,10 @@ def signup(request):
             
 
             user = User.objects.create_user(signup_form.cleaned_data.get("username"), password=signup_form.cleaned_data.get("password"))
+
+            # Assign user to the "basic" group
+            basic_group = Group.objects.get(name='basic')
+            user.groups.add(basic_group)
 
             authenticated_user = authenticate(request, username=signup_form.cleaned_data.get("username"), password=signup_form.cleaned_data.get("password"))
             if authenticated_user is not None:
