@@ -65,3 +65,6 @@ def workout_list(request):
 def workout_detail(request, id):
     workout = get_object_or_404(WorkoutClass, id=id)
     return render(request, "workoutclassindividual.html",{"workout":workout})
+
+def membership_options(request):
+    return render(request, 'member.html')

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership Options</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">>
+</head>
+<body>
+    <header>
+        <h1>Become a Member</h1>
+    </header>
+    <main>
+        <section class="membership-options">
+            <div class="option">
+                <h2>Free Membership</h2>
+                <p>Access to basic features.</p>
+                <button onclick="window.location.href='/login'">Login</button>
+            </div>
+            <div class="option">
+                <h2>Student Membership</h2>
+                <p>Discounted access for students.</p>
+                <button onclick="window.location.href='/register?type=student'">Sign Up</button>
+            </div>
+            <div class="option">
+                <h2>Premium Membership</h2>
+                <p>Access to all features.</p>
+                <button onclick="window.location.href='/register?type=premium'">Sign Up</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Your Company</p>
+    </footer>
+</body>
+</html>
+{% endblock content %}
