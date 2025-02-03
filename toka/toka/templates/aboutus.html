@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section with Background Image and Overlay -->
+<section class="position-relative">
+    <div class="bg-dark" style="background: url('{% static "imgs/background.jpg" %}') no-repeat centre centre; background-size: cover; height: 60vh;">
+        <div style="background: rgba(0, 0, 0, 0.6); height: 100%;"></div>
+    </div>
+    <div class="position-absolute top-50 start-50 translate-middle text-center">
+        <h1 class="display-3 fw-bold">About Toka Fitness</h1>
+        <p class="lead">Empowering Your Fitness Journey</p>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <img src="{% static 'imgs/our-story.jpg' %}" alt="Our Story" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6">
+                <h2 class="mb-4">Our Story</h2>
+                <p>
+                    At Toka Fitness, our journey began with a simple vision: to transform the way individuals experience fitness.
+                    Born out of a passion for health and wellness, we have nurtured a community where every member can flourish.
+                </p>
+                <p>
+                    With state-of-the-art facilities and innovative programmes, we strive to inspire and support you on your path to a healthier, happier life.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Mission Section -->
+<section class="py-5 bg-dark">
+    <div class="container text-center">
+        <h2 class="mb-4">Our Mission</h2>
+        <p class="lead mb-5">
+            To empower individuals with cutting-edge fitness solutions and a supportive community that fuels their journey towards better health.
+        </p>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card bg-black text-light border-0 h-100">
+                    <div class="card-body">
+                        <!-- Note: Ensure Bootstrap Icons are loaded in your base template -->
+                        <i class="bi bi-heart-fill fs-1 mb-3"></i>
+                        <h5 class="card-title">Passion</h5>
+                        <p class="card-text">
+                            Our unwavering passion drives us to create dynamic and transformative experiences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-black text-light border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-people-fill fs-1 mb-3"></i>
+                        <h5 class="card-title">Community</h5>
+                        <p class="card-text">
+                            We build a strong, supportive community that celebrates every success together.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-black text-light border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-lightning-fill fs-1 mb-3"></i>
+                        <h5 class="card-title">Innovation</h5>
+                        <p class="card-text">
+                            Constantly evolving, we embrace the latest trends to keep your workouts exciting and effective.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Meet Our Team Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Meet Our Team</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card bg-black text-light border-0">
+                    <img src="{% static 'imgs/fitnessguy1.png' %}" class="card-img-top" alt="Team Member 1">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Alex Morgan</h5>
+                        <p class="card-text">Head Trainer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-black text-light border-0">
+                    <img src="{% static 'imgs/fitnessguy1.png' %}" class="card-img-top" alt="Team Member 2">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Jamie Taylor</h5>
+                        <p class="card-text">Nutrition Expert</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-black text-light border-0">
+                    <img src="{% static 'imgs/fitnessguy1.png' %}" class="card-img-top" alt="Team Member 3">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Sam Casey</h5>
+                        <p class="card-text">Wellness Coach</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

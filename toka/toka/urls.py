@@ -27,5 +27,6 @@ urlpatterns = [
     path('workout/', workout_list, name='workout_list'),
     path('<int:id>/', workout_detail, name='workout_detail'),
     path('membership/', membership_options, name='membership_options'),
+    path("aboutus/", about_us, name="aboutus"),
     
 ]

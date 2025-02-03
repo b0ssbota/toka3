@@ -105,3 +105,6 @@ def membership_options(request):
         'message': message,
     }
     return render(request, 'member.html', context)
+
+def about_us(request):
+    return render(request, 'aboutus.html')
