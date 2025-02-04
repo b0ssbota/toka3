@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from .forms import LoginForm, SignupForm
-from .models import WorkoutClass, Membership
+from .models import WorkoutClass, Membership, WorkoutPlan, WorkoutPlanPurchase
 
 def home(request):
     return render(request, 'index.html')
@@ -108,3 +108,31 @@ def membership_options(request):
 
 def about_us(request):
     return render(request, 'aboutus.html')
+
+
+def workoutplan_list(request):
+    plans = WorkoutPlan.objects.all()
+    return render(request, 'workoutplan_list.html', {'plans': plans})
+
+def workoutplan_detail(request, id):
+    plan = get_object_or_404(WorkoutPlan, id=id)
+    purchased = False
+    if request.user.is_authenticated:
+        purchased = WorkoutPlanPurchase.objects.filter(user=request.user, workout_plan=plan).exists()
+    return render(request, 'workoutplan_detail.html', {'plan': plan, 'purchased': purchased})
+
+@login_required
+def purchase_workoutplan(request, id):
+    plan = get_object_or_404(WorkoutPlan, id=id)
+    # Check if the plan has already been purchased
+    if WorkoutPlanPurchase.objects.filter(user=request.user, workout_plan=plan).exists():
+        return HttpResponseRedirect("/plan-purchases/")  # Redirect if already purchased
+
+    # Integrate your payment gateway here. For now, assume payment is successful.
+    WorkoutPlanPurchase.objects.create(user=request.user, workout_plan=plan)
+    return HttpResponseRedirect("/plan-purchases/")
+
+@login_required
+def plan_purchase_list(request):
+    purchases = WorkoutPlanPurchase.objects.filter(user=request.user)
+    return render(request, 'plan_purchase_list.html', {'purchases': purchases})

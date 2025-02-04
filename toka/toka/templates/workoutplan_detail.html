@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ plan.title }}</h1>
+  <p>{{ plan.description }}</p>
+  <p>Price: £{{ plan.price }}</p>
+
+  {% if user.is_authenticated %}
+    {% if purchased %}
+      <p>You have already purchased this workout plan.</p>
+    {% else %}
+      <a href="{% url 'purchase_workoutplan' plan.id %}">Purchase this workout plan</a>
+    {% endif %}
+  {% else %}
+    <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to purchase this workout plan.</p>
+  {% endif %}
+{% endblock %}

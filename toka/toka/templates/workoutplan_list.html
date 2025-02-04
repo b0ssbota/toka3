@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Pre‑Made Workout Plans</h1>
+  <ul>
+    {% for plan in plans %}
+      <li>
+        <a href="{% url 'workoutplan_detail' plan.id %}">{{ plan.title }}</a> – £{{ plan.price }}
+      </li>
+    {% empty %}
+      <li>No workout plans are currently available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
