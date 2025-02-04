@@ -112,14 +112,41 @@ def about_us(request):
 
 def workoutplan_list(request):
     plans = WorkoutPlan.objects.all()
-    return render(request, 'workoutplan_list.html', {'plans': plans})
+    filter_type = request.GET.get('filter', 'all')  # Default filter: 'all'
+
+    if request.user.is_authenticated:
+        purchased_plan_ids = WorkoutPlanPurchase.objects.filter(
+            user=request.user
+        ).values_list('workout_plan_id', flat=True)
+        if filter_type == 'purchased':
+            plans = plans.filter(id__in=purchased_plan_ids)
+        elif filter_type == 'not_purchased':
+            plans = plans.exclude(id__in=purchased_plan_ids)
+        # Else, if 'all', do nothing
+    else:
+        # Optionally, if not logged in you can show all or force login to filter.
+        pass
+
+    context = {
+        'plans': plans,
+        'filter': filter_type
+    }
+    return render(request, 'workoutplan_list.html', context)
+
 
 def workoutplan_detail(request, id):
     plan = get_object_or_404(WorkoutPlan, id=id)
     purchased = False
     if request.user.is_authenticated:
-        purchased = WorkoutPlanPurchase.objects.filter(user=request.user, workout_plan=plan).exists()
-    return render(request, 'workoutplan_detail.html', {'plan': plan, 'purchased': purchased})
+        purchased = WorkoutPlanPurchase.objects.filter(
+            user=request.user, workout_plan=plan
+        ).exists()
+    context = {
+        'plan': plan,
+        'purchased': purchased
+    }
+    return render(request, 'workoutplan_detail.html', context)
+
 
 @login_required
 def purchase_workoutplan(request, id):

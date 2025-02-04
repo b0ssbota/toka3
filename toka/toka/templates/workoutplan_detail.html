@@ -1,16 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
   <h1>{{ plan.title }}</h1>
+  <p><strong>Price:</strong> £{{ plan.price }}</p>
   <p>{{ plan.description }}</p>
-  <p>Price: £{{ plan.price }}</p>
 
   {% if user.is_authenticated %}
     {% if purchased %}
-      <p>You have already purchased this workout plan.</p>
+      <!-- Show the full content if purchased -->
+      <div class="workout-content">
+        {{ plan.content|linebreaks }}
+      </div>
     {% else %}
-      <a href="{% url 'purchase_workoutplan' plan.id %}">Purchase this workout plan</a>
+      <p class="text-warning">You must purchase this plan to view the full content.</p>
+      <a href="{% url 'purchase_workoutplan' plan.id %}" class="btn btn-primary">Purchase this Plan</a>
     {% endif %}
   {% else %}
-    <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to purchase this workout plan.</p>
+    <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to purchase and view the full workout plan.</p>
   {% endif %}
 {% endblock %}
