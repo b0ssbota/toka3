@@ -6,3 +6,8 @@ toka/toka/__pycache__/settings.cpython-312.pyc
 toka/toka/__pycache__/urls.cpython-312.pyc
 toka/toka/__pycache__/views.cpython-312.pyc
 __pycache__/
+#database stuff
+.sqlite3
+.db
+db.sqlite3
+db.sqlite3
