@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>{{ plan.title }}</h1>
+  <p><strong>Price:</strong> £{{ plan.price }}</p>
+  <p>{{ plan.description }}</p>
+
+  {% if user.is_authenticated %}
+    {% if purchased %}
+      <!-- Show full plan content if purchased -->
+      <div class="healthplan-content">
+        {{ plan.content|linebreaks }}
+      </div>
+    {% else %}
+      <p class="text-warning">Purchase this Health Plan to view the full content.</p>
+      <a href="{% url 'purchase_healthplan' plan.id %}" class="btn btn-primary">Purchase this Plan</a>
+    {% endif %}
+  {% else %}
+    <p>Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to purchase and view the full Health Plan.</p>
+  {% endif %}
+{% endblock %}

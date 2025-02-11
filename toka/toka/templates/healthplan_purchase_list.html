@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Your Purchased Health Plans</h1>
+  <ul>
+    {% for purchase in purchases %}
+      <li>
+        <a href="{% url 'healthplan_detail' purchase.health_plan.id %}">
+          {{ purchase.health_plan.title }}
+        </a> – Purchased on {{ purchase.purchased_at|date:"d M Y" }}
+      </li>
+    {% empty %}
+      <li>You have not purchased any Health Plans yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

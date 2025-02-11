@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from .forms import LoginForm, SignupForm
-from .models import WorkoutClass, Membership, WorkoutPlan, WorkoutPlanPurchase
+from .models import *
 
 def home(request):
     return render(request, 'index.html')
@@ -163,3 +163,37 @@ def purchase_workoutplan(request, id):
 def plan_purchase_list(request):
     purchases = WorkoutPlanPurchase.objects.filter(user=request.user)
     return render(request, 'plan_purchase_list.html', {'purchases': purchases})
+
+
+
+
+def healthplan_list(request):
+    plans = HealthPlan.objects.all()
+    # Optionally, you could implement filtering (e.g., purchased, not purchased) similar to workout plans.
+    return render(request, 'healthplan_list.html', {'plans': plans})
+
+def healthplan_detail(request, id):
+    plan = get_object_or_404(HealthPlan, id=id)
+    purchased = False
+    if request.user.is_authenticated:
+        purchased = HealthPlanPurchase.objects.filter(user=request.user, health_plan=plan).exists()
+    context = {
+        'plan': plan,
+        'purchased': purchased
+    }
+    return render(request, 'healthplan_detail.html', context)
+
+@login_required
+def purchase_healthplan(request, id):
+    plan = get_object_or_404(HealthPlan, id=id)
+    # Check if already purchased
+    if HealthPlanPurchase.objects.filter(user=request.user, health_plan=plan).exists():
+        return redirect('healthplan_purchase_list')
+    # Payment integration goes here. For now, assume success.
+    HealthPlanPurchase.objects.create(user=request.user, health_plan=plan)
+    return redirect('healthplan_purchase_list')
+
+@login_required
+def healthplan_purchase_list(request):
+    purchases = HealthPlanPurchase.objects.filter(user=request.user)
+    return render(request, 'healthplan_purchase_list.html', {'purchases': purchases})

@@ -58,3 +58,26 @@ class WorkoutPlanPurchase(models.Model):
 
     def __str__(self):
         return f"{self.user.username} purchased {self.workout_plan.title}"
+    
+
+class HealthPlan(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)  # A short teaser
+    content = models.TextField(blank=True)      # Full plan details, visible only after purchase
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+class HealthPlanPurchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='healthplan_purchases')
+    health_plan = models.ForeignKey(HealthPlan, on_delete=models.CASCADE, related_name='purchases')
+    purchased_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'health_plan')  # One‑time purchase per user
+
+    def __str__(self):
+        return f"{self.user.username} purchased {self.health_plan.title}"

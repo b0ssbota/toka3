@@ -32,5 +32,9 @@ urlpatterns = [
     path('plan/<int:id>/', workoutplan_detail, name='workoutplan_detail'),
     path('plan/<int:id>/purchase/', purchase_workoutplan, name='purchase_workoutplan'),
     path('plan-purchases/', plan_purchase_list, name='plan_purchase_list'),
-    
+    path('health-plans/', healthplan_list, name='healthplan_list'),
+    path('health-plan/<int:id>/', healthplan_detail, name='healthplan_detail'),
+    path('health-plan/<int:id>/purchase/', purchase_healthplan, name='purchase_healthplan'),
+    path('health-plan-purchases/', healthplan_purchase_list, name='healthplan_purchase_list'),
 ]
+    

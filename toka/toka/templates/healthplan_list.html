@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Health Plans</h1>
+  <ul>
+    {% for plan in plans %}
+      <li>
+        <a href="{% url 'healthplan_detail' plan.id %}">
+          {{ plan.title }}
+        </a> – £{{ plan.price }}
+      </li>
+    {% empty %}
+      <li>No Health Plans available at the moment.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
