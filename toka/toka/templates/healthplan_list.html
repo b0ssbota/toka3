@@ -3,15 +3,27 @@
 
 {% block content %}
   <h1>Health Plans</h1>
+  
+  <!-- Filter Options -->
+  <div class="mb-4">
+    <a href="{% url 'healthplan_list' %}?filter=all" class="btn btn-outline-secondary {% if filter == 'all' %}active{% endif %}">
+      All Plans
+    </a>
+    <a href="{% url 'healthplan_list' %}?filter=purchased" class="btn btn-outline-secondary {% if filter == 'purchased' %}active{% endif %}">
+      Purchased Plans
+    </a>
+    <a href="{% url 'healthplan_list' %}?filter=not_purchased" class="btn btn-outline-secondary {% if filter == 'not_purchased' %}active{% endif %}">
+      Not Purchased Plans
+    </a>
+  </div>
+  
   <ul>
     {% for plan in plans %}
       <li>
-        <a href="{% url 'healthplan_detail' plan.id %}">
-          {{ plan.title }}
-        </a> – £{{ plan.price }}
+        <a href="{% url 'healthplan_detail' plan.id %}">{{ plan.title }}</a> – £{{ plan.price }}
       </li>
     {% empty %}
-      <li>No Health Plans available at the moment.</li>
+      <li>No health plans available under this filter.</li>
     {% endfor %}
   </ul>
 {% endblock %}

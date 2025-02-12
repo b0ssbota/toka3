@@ -169,9 +169,24 @@ def plan_purchase_list(request):
 
 def healthplan_list(request):
     plans = HealthPlan.objects.all()
-    # Optionally, you could implement filtering (e.g., purchased, not purchased) similar to workout plans.
-    return render(request, 'healthplan_list.html', {'plans': plans})
-
+    filter_type = request.GET.get('filter', 'all')  # Default filter is "all"
+    
+    if request.user.is_authenticated:
+        purchased_plan_ids = HealthPlanPurchase.objects.filter(
+            user=request.user
+        ).values_list('health_plan_id', flat=True)
+        
+        if filter_type == 'purchased':
+            plans = plans.filter(id__in=purchased_plan_ids)
+        elif filter_type == 'not_purchased':
+            plans = plans.exclude(id__in=purchased_plan_ids)
+        # If filter is 'all', do nothing
+    # Optionally, you could enforce login for filtering
+    context = {
+        'plans': plans,
+        'filter': filter_type,
+    }
+    return render(request, 'healthplan_list.html', context)
 def healthplan_detail(request, id):
     plan = get_object_or_404(HealthPlan, id=id)
     purchased = False
@@ -197,3 +212,27 @@ def purchase_healthplan(request, id):
 def healthplan_purchase_list(request):
     purchases = HealthPlanPurchase.objects.filter(user=request.user)
     return render(request, 'healthplan_purchase_list.html', {'purchases': purchases})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
