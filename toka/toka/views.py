@@ -187,6 +187,7 @@ def healthplan_list(request):
         'filter': filter_type,
     }
     return render(request, 'healthplan_list.html', context)
+
 def healthplan_detail(request, id):
     plan = get_object_or_404(HealthPlan, id=id)
     purchased = False

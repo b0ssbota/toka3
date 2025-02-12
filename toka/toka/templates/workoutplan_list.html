@@ -2,28 +2,25 @@
 {% load static %}
 
 {% block content %}
-  <h1>Pre‑Made Workout Plans</h1>
-
-  <!-- Filter Options -->
-  <div class="mb-4">
-    <a href="{% url 'workoutplan_list' %}?filter=all" class="btn btn-outline-secondary {% if filter == 'all' %}active{% endif %}">
-      All Plans
-    </a>
-    <a href="{% url 'workoutplan_list' %}?filter=purchased" class="btn btn-outline-secondary {% if filter == 'purchased' %}active{% endif %}">
-      Purchased Plans
-    </a>
-    <a href="{% url 'workoutplan_list' %}?filter=not_purchased" class="btn btn-outline-secondary {% if filter == 'not_purchased' %}active{% endif %}">
-      Not Purchased Plans
-    </a>
-  </div>
-
-  <ul>
+<div class="container" style="padding: 2rem 0;">
+  <h1 class="text-center" style="margin-bottom: 2rem;">Workout Plans</h1>
+  
+  <div class="info-cards">
     {% for plan in plans %}
-      <li>
-        <a href="{% url 'workoutplan_detail' plan.id %}">{{ plan.title }}</a> – £{{ plan.price }}
-      </li>
+    <div class="card">
+      {% if plan.image %}
+        <img src="{{ plan.image.url }}" alt="{{ plan.title }}" style="width:100%; height:auto; margin-bottom:10px;">
+      {% else %}
+        <!-- Use a default image if none is provided -->
+        <img src="{% static 'imgs/default_plan.jpg' %}" alt="{{ plan.title }}" style="width:100%; height:auto; margin-bottom:10px;">
+      {% endif %}
+      <h3>{{ plan.title }}</h3>
+      <p>Price: £{{ plan.price }}</p>
+      <a href="{% url 'workoutplan_detail' plan.id %}" class="btn-cta" style="display: inline-block; margin-top: 10px;">View Plan</a>
+    </div>
     {% empty %}
-      <li>No workout plans available under this filter.</li>
+      <p class="text-center">No workout plans available at the moment.</p>
     {% endfor %}
-  </ul>
+  </div>
+</div>
 {% endblock %}
