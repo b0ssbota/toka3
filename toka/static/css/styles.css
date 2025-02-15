@@ -1,0 +1,277 @@
+/* ------------- GLOBAL ------------- */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #1C1C1C;
+    color: #ffffff; /* Base text colour */
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ----------------------------------
+   HEADER & NAV
+---------------------------------- */
+header {
+    width: 100%;
+    background-color: #000000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: centre;
+    padding: 1rem 2rem;
+}
+
+.nav-logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F7941D; /* Brand accent colour (orange) */
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links li a {
+    color: #ffffff;
+    font-weight: 500;
+    transition: colour 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #F7941D;
+}
+
+.btn-nav {
+    padding: 0.5rem 1rem;
+    background-color: #F7941D;
+    color: #000000;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-nav:hover {
+    background-color: #ffffff;
+    color: #F7941D;
+}
+
+.navbar-brand img {
+    height: 50px;
+    width: auto;
+}
+
+/* Example override for orange accent if desired */
+.btn-warning {
+    background-color: #F7941D;
+    border-color: #F7941D;
+}
+
+.btn-warning:hover {
+    background-color: #FFC861;
+    border-color: #FFC861;
+}
+
+
+/* ----------------------------------
+   HERO SECTION
+---------------------------------- */
+.hero {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    display: flex;
+    align-items: centre;
+    justify-content: centre;
+    text-align: centre;
+    background: #2D2D2D; /* Placeholder if no hero image is used */
+    padding: 3rem 1rem;
+}
+
+.hero-text h1 {
+    font-size: 2.5rem;
+    color: #F7941D;
+    margin-bottom: 1rem;
+}
+
+.hero-text h2 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.hero-text h3 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+}s
+
+.btn-cta {
+    display: inline-block;
+    background-color: #F7941D;
+    color: #000000;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cta:hover {
+    background-color: #ffffff;
+    color: #F7941D;
+}
+
+/* ----------------------------------
+   MOTIVATION SECTION
+---------------------------------- */
+.motivation {
+    background-color: #1C1C1C;
+    padding: 3rem 1rem;
+    text-align: centre;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.motivation h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #F7941D;
+}
+
+.motivation p {
+    margin-bottom: 1rem;
+    color: #ffffff;
+    line-height: 1.8;
+}
+
+/* ----------------------------------
+   INFO CARDS SECTION
+---------------------------------- */
+.info-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: centre;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 3rem 1rem;
+    background-color: #2D2D2D;
+}
+
+.card {
+    background-color: #1C1C1C;
+    flex: 1 1 200px;
+    min-height: 150px;
+    max-width: 300px;
+    padding: 2rem;
+    display: flex;
+    align-items: centre;
+    justify-content: centre;
+    border: 1px solid #333333;
+    transition: transform 0.3s ease;
+    text-align: centre;
+    margin: 0.5rem;
+}
+
+.card h3 {
+    color: #ffffff;
+    font-size: 1.2rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.learn-more-wrapper {
+    width: 100%;
+    text-align: centre;
+    margin-top: 2rem;
+}
+
+.learn-more-wrapper .btn-cta {
+    margin: 0 auto;
+}
+
+/* ----------------------------------
+   FOOTER
+---------------------------------- */
+footer {
+    background-color: #000000;
+    padding: 2rem 1rem;
+    margin-top: auto;
+}
+
+.footer-sections {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-company,
+.footer-members,
+.footer-socials {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footer-company a,
+.footer-members a,
+.footer-socials a {
+    color: #ffffff;
+    transition: colour 0.3s ease;
+}
+
+.footer-company a:hover,
+.footer-members a:hover,
+.footer-socials a:hover {
+    color: #F7941D;
+}
+
+/* ----------------------------------
+   MEDIA QUERIES
+---------------------------------- */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .info-cards {
+        flex-direction: column;
+        align-items: centre;
+    }
+    .footer-sections {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  

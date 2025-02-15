@@ -1,0 +1,21 @@
+{
+    "builds": [{
+        "src": "toka\toka/wsgi.py",
+        "use": "@vercel/python",
+        "config": { 
+            "maxLambdaSize": "15mb", 
+            "runtime": "python3.12"
+        }
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "toka\toka/wsgi.py"
+        }
+    ],
+    "git": {
+        "deploymentEnabled": {
+            "main": true
+        }
+    }
+}
