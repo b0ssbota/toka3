@@ -39,6 +39,7 @@ urlpatterns = [
     path('health-plan/<int:id>/', healthplan_detail, name='healthplan_detail'),
     path('health-plan/<int:id>/purchase/', purchase_healthplan, name='purchase_healthplan'),
     path('health-plan-purchases/', healthplan_purchase_list, name='healthplan_purchase_list'),
+    path("contact/", contact, name="contact"),
 ]
     
 if settings.DEBUG:

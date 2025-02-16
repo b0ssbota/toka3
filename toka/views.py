@@ -215,8 +215,8 @@ def healthplan_purchase_list(request):
     return render(request, 'healthplan_purchase_list.html', {'purchases': purchases})
 
 
-
-
+def contact(request):
+    return render(request, 'contact.html')
 
 
 
