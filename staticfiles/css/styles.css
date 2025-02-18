@@ -274,4 +274,21 @@ footer {
       grid-template-columns: 1fr;
     }
   }
+  /* Ensure hero text is centered */
+.hero-text {
+    text-align: center;
+  }
+  
+  /* Modern card hover effect */
+  .modern-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Modern boxes under subscription section */
+  .modern-box-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
   
