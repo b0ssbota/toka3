@@ -158,47 +158,57 @@ header {
     color: #ffffff;
     line-height: 1.8;
 }
-
 /* ----------------------------------
-   INFO CARDS SECTION
+   INFO CARDS SECTION - UPDATED
 ---------------------------------- */
 .info-cards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: centre;
-    align-items: flex-start;
-    gap: 1rem;
+    justify-content: center; /* Use "center" instead of "centre" */
+    gap: 1.5rem;
     padding: 3rem 1rem;
     background-color: #2D2D2D;
 }
 
 .card {
     background-color: #1C1C1C;
-    flex: 1 1 200px;
-    min-height: 150px;
+    flex: 1 1 220px;
     max-width: 300px;
-    padding: 2rem;
-    display: flex;
-    align-items: centre;
-    justify-content: centre;
     border: 1px solid #333333;
-    transition: transform 0.3s ease;
-    text-align: centre;
-    margin: 0.5rem;
-}
-
-.card h3 {
-    color: #ffffff;
-    font-size: 1.2rem;
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.card h3 {
+    margin-top: 1rem;
+    color: #ffffff;
+    font-size: 1.4rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+    margin: 0.5rem 0 1.5rem 0;
+    color: #dddddd;
 }
 
 .learn-more-wrapper {
-    width: 100%;
-    text-align: centre;
+    text-align: center;
     margin-top: 2rem;
 }
 

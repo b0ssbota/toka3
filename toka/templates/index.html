@@ -37,50 +37,34 @@
 <!-- What We Offer Section -->
 <section class="py-5 bg-dark text-white text-center">
     <div class="container">
-        <h2 class="fw-bold mb-4">WHAT WE OFFER</h2>
-        <div class="row g-4">
-            <!-- Card 1: Health Plan -->
-            <div class="col-md-4">
-                <div class="card modern-card h-100 border-0" style="background-color: #1C1C1C; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s ease;">
-                    <img src="{% static 'imgs/gym.jpg' %}" class="card-img-top" alt="Health Plan">
-                    <div class="card-body">
-                        <h5 class="card-title">Health Plan</h5>
-                        <p class="card-text">
-                            Discover our comprehensive health plan options designed to keep you on track.
-                        </p>
-                        <a href="{% url 'healthplan_list' %}" class="btn btn-warning">Get More Info</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 2: Work Out Classes -->
-            <div class="col-md-4">
-                <div class="card modern-card h-100 border-0" style="background-color: #1C1C1C; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s ease;">
-                    <img src="{% static 'imgs/gym.jpg' %}" class="card-img-top" alt="Personal Trainer">
-                    <div class="card-body">
-                        <h5 class="card-title">Work Out Classes</h5>
-                        <p class="card-text">
-                            Work with certified experts who tailor workouts to your specific goals.
-                        </p>
-                        <a href="{% url 'workout_list' %}" class="btn btn-warning">Get More Info</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 3: Work Out Plans -->
-            <div class="col-md-4">
-                <div class="card modern-card h-100 border-0" style="background-color: #1C1C1C; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s ease;">
-                    <img src="{% static 'imgs/gym.jpg' %}" class="card-img-top" alt="Work Out Plans">
-                    <div class="card-body">
-                        <h5 class="card-title">Work Out Plans</h5>
-                        <p class="card-text">
-                            Flexible and effective routines to transform your body at your own pace.
-                        </p>
-                        <a href="{% url 'workoutplan_list' %}" class="btn btn-warning">Get More Info</a>
-                    </div>
-                </div>
-            </div>
+      <h2 class="fw-bold mb-4">WHAT WE OFFER</h2>
+      <div class="info-cards">
+        <!-- Card 1: Health Plan -->
+        <div class="card">
+          <img src="{% static 'imgs/gym.jpg' %}" alt="Health Plan">
+          <h3>Health Plan</h3>
+          <p>Discover our comprehensive health plan options.</p>
+          <a href="{% url 'healthplan_list' %}" class="btn btn-warning">Get More Info</a>
         </div>
+        <!-- Card 2: Work Out Classes -->
+        <div class="card">
+          <img src="{% static 'imgs/gym.jpg' %}" alt="Work Out Classes">
+          <h3>Work Out Classes</h3>
+          <p>Train with certified experts tailored to your goals.</p>
+          <a href="{% url 'workout_list' %}" class="btn btn-warning">Get More Info</a>
+        </div>
+        <!-- Card 3: Work Out Plans -->
+        <div class="card">
+          <img src="{% static 'imgs/gym.jpg' %}" alt="Work Out Plans">
+          <h3>Work Out Plans</h3>
+          <p>Flexible routines to transform your body at your own pace.</p>
+          <a href="{% url 'workoutplan_list' %}" class="btn btn-warning">Get More Info</a>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
+  
+  
 
 <!-- Subscription and Join Us Section -->
 <section class="py-5 bg-dark text-white">
