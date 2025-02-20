@@ -34,6 +34,73 @@
     </div>
 </section>
 
+<!-- Top 4 Health Plans Section -->
+<section class="py-5 bg-white text-dark">
+    <div class="container">
+      <!-- Section Heading & "See More" Link -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Health Plans</h2>
+        <a href="{% url 'healthplan_list' %}" class="text-decoration-none">See More Plans</a>
+      </div>
+  
+      <!-- Short Description/Subtitle -->
+      <p class="mb-4">
+        Explore our top 4 curated health plans, carefully designed to guide you toward better health and well-being.
+      </p>
+  
+      <!-- Row of Cards -->
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% comment %}
+          If you have a queryset named "health_plans", you can limit to 4:
+          {% for plan in health_plans|slice:":4" %}
+        {% endcomment %}
+  
+        {% for plan in top_four_health_plans %}
+        <div class="col">
+          <div class="card h-100 border-0 shadow">
+            <!-- Plan Image -->
+            {% if plan.image %}
+              <img 
+                src="{{ plan.image.url }}" 
+                class="card-img-top" 
+                alt="{{ plan.title }}"
+                style="object-fit: cover; height: 180px;"
+              >
+            {% else %}
+              <!-- Fallback image if none is uploaded -->
+              <img 
+                src="{% static 'imgs/default_plan.jpg' %}" 
+                class="card-img-top" 
+                alt="Health Plan"
+                style="object-fit: cover; height: 180px;"
+              >
+            {% endif %}
+  
+            <!-- Card Body -->
+            <div class="card-body">
+              <h5 class="card-title">{{ plan.title }}</h5>
+              <!-- If you want a short description or date, you can display it here -->
+              <p class="card-text text-muted">
+                {{ plan.description|truncatewords:15 }}
+                <!-- or if you have a date field: {{ plan.created_at|date:"F j, Y" }} -->
+              </p>
+            </div>
+  
+            <!-- Card Footer with Price and Link -->
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <span class="text-muted">£{{ plan.price }}</span>
+              <a href="{% url 'healthplan_detail' plan.id %}" class="btn btn-warning">
+                View Plan
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  
+
 <!-- What We Offer Section -->
 <section class="py-5 bg-dark text-white text-center">
     <div class="container">
