@@ -8,7 +8,8 @@ from .forms import LoginForm, SignupForm
 from .models import *
 
 def home(request):
-    return render(request, 'index.html')
+    top_four_health_plans = HealthPlan.objects.all()[:4]
+    return render(request, 'index.html', {'top_four_health_plans': top_four_health_plans})
 
 def signup(request):
     if request.method == "POST":
