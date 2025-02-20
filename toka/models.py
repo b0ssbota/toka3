@@ -67,6 +67,7 @@ class HealthPlan(models.Model):
     description = models.TextField(blank=True)  # A short teaser
     content = models.TextField(blank=True)      # Full plan details, visible only after purchase
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    image = models.ImageField(upload_to='health_plans/', blank=True, null=True)  # <-- New field
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
