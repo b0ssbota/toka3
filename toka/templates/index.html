@@ -169,6 +169,48 @@
 
 <!-- Subscription and Join Us Section -->
 
+<!-- Workout Classes Section -->
+<section class="py-5 bg-light text-dark">
+    <div class="container">
+      <!-- Section Heading & "See All Classes" Link -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Workout Classes</h2>
+        <a href="{% url 'workout_list' %}" class="text-decoration-none">See All Classes</a>
+      </div>
+  
+      <!-- Short Description -->
+      <p class="mb-4">
+        Explore our variety of in-gym workout classes led by certified trainers.
+      </p>
+  
+      <!-- Grid of Workout Class Cards -->
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for workout in top_workout_classes %}
+        <div class="col">
+          <div class="card h-100 border-0 shadow" style="border-radius: 10px; overflow: hidden;">
+            {% if workout.image %}
+            <img src="{{ workout.image.url }}" class="card-img-top" alt="{{ workout.name }}" style="height: 180px; object-fit: cover;">
+            {% else %}
+            <img src="{% static 'imgs/default_workout.jpg' %}" class="card-img-top" alt="Workout Class" style="height: 180px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ workout.name }}</h5>
+              <p class="card-text text-muted">
+                {{ workout.difficulty }} &bull; {{ workout.length }} min
+              </p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+              <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning">View Class</a>
+              <span class="text-muted">£{{ workout.price }}</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  
+
 <!-- Why Choose Us Section with Left Boxes and Right Image -->
 <section class="py-5 bg-dark text-white">
     <div class="container">
