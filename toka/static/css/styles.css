@@ -285,3 +285,20 @@ footer {
     }
   }
   
+  .modern-box-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .modern-box-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Optionally, increase the font-size for the headings in the Why Choose Us boxes */
+  .bg-dark.text-white h2 {
+    font-size: 2.5rem;
+  }
+  
+  .bg-dark.text-white h4 {
+    font-size: 1.75rem;
+  }

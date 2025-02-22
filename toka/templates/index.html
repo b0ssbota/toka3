@@ -86,27 +86,78 @@
     </div>
 </section>
 
+<!-- Top 4 Workout Plans Section -->
+<section class="py-5 bg-white text-dark">
+    <div class="container">
+        <!-- Heading & "See More" Link -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fw-bold">Workout Plans</h2>
+            <a href="{% url 'workoutplan_list' %}" class="text-decoration-none">See More Plans</a>
+        </div>
+        
+        <!-- Short Description -->
+        <p class="mb-4">
+            Explore our top 4 curated workout plans, carefully designed to help you reach your fitness goals.
+        </p>
+
+        <!-- Row of 4 Plans -->
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for plan in top_four_workout_plans %}
+            <div class="col">
+                <div class="card h-100 border-0 shadow">
+                    <!-- Plan Image (if your WorkoutPlan model has an image field) -->
+                    {% if plan.image %}
+                        <img 
+                            src="{{ plan.image.url }}" 
+                            class="card-img-top" 
+                            alt="{{ plan.title }}"
+                            style="height: 180px; object-fit: cover;"
+                        >
+                    {% else %}
+                        <!-- Fallback image -->
+                        <img 
+                            src="{% static 'imgs/default_plan.jpg' %}" 
+                            class="card-img-top" 
+                            alt="Workout Plan"
+                            style="height: 180px; object-fit: cover;"
+                        >
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plan.title }}</h5>
+                        <!-- Optional: display creation date -->
+                        <p class="text-muted mb-2">{{ plan.created_at|date:"F j, Y" }}</p>
+                        <!-- Short description (truncate to 15 words) -->
+                        <p class="card-text mb-2">{{ plan.description|truncatewords:15 }}</p>
+                        <p class="fw-bold mb-0">£{{ plan.price }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 <!-- What We Offer Section -->
-<section class="py-5 bg-dark text-white text-center">
+<!-- <section class="py-5 bg-dark text-white text-center">
     <div class="container">
         <h2 class="fw-bold mb-4">WHAT WE OFFER</h2>
-        <div class="info-cards">
+        <div class="info-cards"> -->
             <!-- Card 1: Health Plan -->
-            <div class="card">
+            <!-- <div class="card">
                 <img src="{% static 'imgs/gym.jpg' %}" alt="Health Plan">
                 <h3>Health Plan</h3>
                 <p>Discover our comprehensive health plan options.</p>
                 <a href="{% url 'healthplan_list' %}" class="btn btn-warning">Get More Info</a>
-            </div>
+            </div> -->
             <!-- Card 2: Work Out Classes -->
-            <div class="card">
+            <!-- <div class="card">
                 <img src="{% static 'imgs/gym.jpg' %}" alt="Work Out Classes">
                 <h3>Work Out Classes</h3>
                 <p>Train with certified experts tailored to your goals.</p>
                 <a href="{% url 'workout_list' %}" class="btn btn-warning">Get More Info</a>
-            </div>
+            </div> -->
             <!-- Card 3: Work Out Plans -->
-            <div class="card">
+            <!-- <div class="card">
                 <img src="{% static 'imgs/gym.jpg' %}" alt="Work Out Plans">
                 <h3>Work Out Plans</h3>
                 <p>Flexible routines to transform your body at your own pace.</p>
@@ -114,86 +165,167 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- Subscription and Join Us Section -->
+
+<!-- Why Choose Us Section with Left Boxes and Right Image -->
 <section class="py-5 bg-dark text-white">
     <div class="container">
-        <div class="row justify-content-center">
-            <!-- Reason to Join Box 1 -->
-            <div class="col-md-4">
-                <div class="p-4 bg-success text-white rounded shadow modern-box-hover">
-                    <h5 class="fw-bold">Achieve Your Goals</h5>
-                    <p>Our personalised training plans and expert trainers will help you meet and exceed your fitness aspirations.</p>
-                </div>
+      <div class="row align-items-center">
+        <!-- Left Column: Boxes -->
+        <div class="col-md-6">
+          <h2 class="fw-bold mb-4">Why Choose Us?</h2>
+          
+          <!-- Box 1: Expert Trainers -->
+          <div class="mb-4 modern-box-hover p-3 rounded shadow" style="background-color: #ffffff; color: #000000;">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 me-3">
+                <img src="{% static 'imgs/icon-trainers.png' %}" alt="Expert Trainers" style="width:50px;">
+              </div>
+              <div class="flex-grow-1">
+                <h4 class="fw-bold mb-1">Expert Trainers</h4>
+                <p class="mb-0">Our certified trainers offer personalized guidance to ensure every workout counts.</p>
+              </div>
             </div>
-            <!-- Reason to Join Box 2 -->
-            <div class="col-md-4">
-                <div class="p-4 bg-primary text-white rounded shadow modern-box-hover">
-                    <h5 class="fw-bold">State-of-the-Art Equipment</h5>
-                    <p>Access the latest equipment designed to deliver the best workout experience for everyone.</p>
-                </div>
+          </div>
+          
+          <!-- Box 2: Cutting-Edge Facilities -->
+          <div class="mb-4 modern-box-hover p-3 rounded shadow" style="background-color: #ffffff; color: #000000;">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 me-3">
+                <img src="{% static 'imgs/icon-facilities.png' %}" alt="Cutting-Edge Facilities" style="width:50px;">
+              </div>
+              <div class="flex-grow-1">
+                <h4 class="fw-bold mb-1">Cutting-Edge Facilities</h4>
+                <p class="mb-0">Experience top-of-the-line equipment and a modern gym floor designed for you.</p>
+              </div>
             </div>
-            <!-- Reason to Join Box 3 -->
-            <div class="col-md-4">
-                <div class="p-4 bg-warning text-dark rounded shadow modern-box-hover">
-                    <h5 class="fw-bold">Community Support</h5>
-                    <p>Join a supportive community that motivates and inspires you to push your limits.</p>
-                </div>
+          </div>
+          
+          <!-- Box 3: Flexible Plans -->
+          <div class="mb-4 modern-box-hover p-3 rounded shadow" style="background-color: #ffffff; color: #000000;">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 me-3">
+                <img src="{% static 'imgs/icon-plans.png' %}" alt="Flexible Plans" style="width:50px;">
+              </div>
+              <div class="flex-grow-1">
+                <h4 class="fw-bold mb-1">Flexible Plans</h4>
+                <p class="mb-0">Choose from diverse membership options tailored to fit your busy schedule.</p>
+              </div>
             </div>
+          </div>
+          
+          <!-- Box 4: Supportive Community -->
+          <div class="mb-4 modern-box-hover p-3 rounded shadow" style="background-color: #ffffff; color: #000000;">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0 me-3">
+                <img src="{% static 'imgs/icon-community.png' %}" alt="Supportive Community" style="width:50px;">
+              </div>
+              <div class="flex-grow-1">
+                <h4 class="fw-bold mb-1">Supportive Community</h4>
+                <p class="mb-0">Join a network of motivated members who encourage each other to succeed.</p>
+              </div>
+            </div>
+          </div>
         </div>
         
-        <hr class="my-4 text-secondary">
-
-        <!-- Why Choose Us Section -->
-        <h2 class="fw-bold mb-4 text-center">Why Choose Us?</h2>
-        <div class="row row-cols-1 row-cols-md-2 g-4">
-            <!-- Box 1 -->
-            <div class="col">
-                <div class="p-4 rounded shadow modern-box-hover" style="background-color: #ffffff; color: #000000;">
-                    <h5 class="fw-bold">Expert Trainers</h5>
-                    <p>Our certified trainers offer personalized guidance, ensuring every workout counts toward your unique goals.</p>
-                </div>
-            </div>
-            <!-- Box 2 -->
-            <div class="col">
-                <div class="p-4 rounded shadow modern-box-hover" style="background-color: #ffffff; color: #000000;">
-                    <h5 class="fw-bold">Cutting-Edge Facilities</h5>
-                    <p>Experience top-of-the-line equipment and a modern gym floor designed to optimize each workout.</p>
-                </div>
-            </div>
-            <!-- Box 3 -->
-            <div class="col">
-                <div class="p-4 rounded shadow modern-box-hover" style="background-color: #ffffff; color: #000000;">
-                    <h5 class="fw-bold">Flexible Plans</h5>
-                    <p>Choose from diverse membership options that fit your schedule, whether you’re a busy professional or a fitness enthusiast.</p>
-                </div>
-            </div>
-            <!-- Box 4 -->
-            <div class="col">
-                <div class="p-4 rounded shadow modern-box-hover" style="background-color: #ffffff; color: #000000;">
-                    <h5 class="fw-bold">Supportive Community</h5>
-                    <p>Join a network of motivated members who encourage each other to break barriers and celebrate progress.</p>
-                </div>
-            </div>
+        <!-- Right Column: Image -->
+        <div class="col-md-6">
+          <img src="{% static 'imgs/why-choose-us.jpg' %}" alt="Why Choose Us" class="img-fluid rounded shadow">
         </div>
-
-        <hr class="my-4 text-secondary">
-
-        <!-- Subscribe Form and Sign Up Button -->
-        <div class="row align-items-center">
-            <!-- Subscribe Form -->
-            <div class="col-md-8">
-                <form class="d-flex">
-                    <input type="email" class="form-control me-2" placeholder="Enter your email for updates" required>
-                    <button class="btn btn-warning" type="submit">Subscribe</button>
-                </form>
-            </div>
-            <!-- Sign Up Button -->
-            <div class="col-md-4 text-center">
-                <a href="{% url 'signup' %}" class="btn btn-outline-light btn-lg w-100">Join Us Today</a>
-            </div>
-        </div>
+      </div>
     </div>
-</section>
+  </section>
+  
+ <!-- Membership Options Section --> 
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="text-center fw-bold mb-4">Membership Options</h2>
+      {% if message %}
+        <div class="alert alert-info text-center">{{ message }}</div>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <div class="mb-4 text-center">
+          <h4>Your Current Membership: {{ membership.membership_type|title }}</h4>
+          <p>Price: &pound;{{ membership.price }}</p>
+        </div>
+        <div class="row">
+          <!-- Free Membership -->
+          <div class="col-md-4">
+            <div class="card mb-4 shadow">
+              <img src="{% static 'imgs/free.jpg' %}" class="card-img-top" alt="Free Membership">
+              <div class="card-body text-center">
+                <h5 class="card-title">Free Membership</h5>
+                <p class="card-text">Enjoy basic access to our gym facilities.</p>
+                <p class="card-text fw-bold">&pound;0.00</p>
+                {% if membership.membership_type == 'free' %}
+                  <button class="btn btn-secondary" disabled>Current Plan</button>
+                {% else %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="membership_type" value="free">
+                    <button type="submit" name="upgrade" class="btn btn-warning">Downgrade to Free</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <!-- Student Membership -->
+          <div class="col-md-4">
+            <div class="card mb-4 shadow">
+              <img src="{% static 'imgs/student.jpg' %}" class="card-img-top" alt="Student Membership">
+              <div class="card-body text-center">
+                <h5 class="card-title">Student Membership</h5>
+                <p class="card-text">Special discount for students with full gym access.</p>
+                <p class="card-text fw-bold">&pound;5.99</p>
+                {% if membership.membership_type == 'student' %}
+                  <button class="btn btn-secondary" disabled>Current Plan</button>
+                  <form method="post" class="mt-2">
+                    {% csrf_token %}
+                    <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
+                  </form>
+                {% else %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="membership_type" value="student">
+                    <button type="submit" name="upgrade" class="btn btn-warning">Upgrade to Student</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <!-- Premium Membership -->
+          <div class="col-md-4">
+            <div class="card mb-4 shadow">
+              <img src="{% static 'imgs/premium.jpg' %}" class="card-img-top" alt="Premium Membership">
+              <div class="card-body text-center">
+                <h5 class="card-title">Premium Membership</h5>
+                <p class="card-text">Unlock all facilities and classes with premium access.</p>
+                <p class="card-text fw-bold">&pound;19.99</p>
+                {% if membership.membership_type == 'premium' %}
+                  <button class="btn btn-secondary" disabled>Current Plan</button>
+                  <form method="post" class="mt-2">
+                    {% csrf_token %}
+                    <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
+                  </form>
+                {% else %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="membership_type" value="premium">
+                    <button type="submit" name="upgrade" class="btn btn-warning">Upgrade to Premium</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="text-center">
+          <p>Please <a href="/login">login</a> to manage your membership.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+  
 {% endblock content %}
