@@ -109,7 +109,7 @@ def membership_options(request):
         'membership': membership,
         'message': message,
     }
-    return render(request, 'member.html', context)
+    return render(request, 'index.html', context)
 
 def about_us(request):
     return render(request, 'aboutus.html')

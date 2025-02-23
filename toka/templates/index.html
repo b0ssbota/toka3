@@ -273,17 +273,17 @@
           </div>
         </div>
         
-        <!-- Right Column: Image -->
-        <div class="col-md-6">
-          <img src="{% static 'imgs/why-choose-us.png' %}" alt="Why Choose Us" >
+        <!-- Right Column: SVG Image -->
+        <div class="col-md-6 text-end">
+          <img src="{% static 'imgs/why-choose-us.png' %}" alt="Why Choose Us" class="img-fluid">
         </div>
       </div>
     </div>
   </section>
   
   
- <!-- Membership Options Section --> 
-  <section class="py-5 bg-light">
+<!-- Membership Options Section --> 
+<section class="py-5 bg-light">
     <div class="container">
       <h2 class="text-center fw-bold mb-4">Membership Options</h2>
       {% if message %}
@@ -306,7 +306,8 @@
                 {% if membership.membership_type == 'free' %}
                   <button class="btn btn-secondary" disabled>Current Plan</button>
                 {% else %}
-                  <form method="post">
+                  <!-- Added action attribute -->
+                  <form action="{% url 'membership_options' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="membership_type" value="free">
                     <button type="submit" name="upgrade" class="btn btn-warning">Downgrade to Free</button>
@@ -325,12 +326,12 @@
                 <p class="card-text fw-bold">&pound;5.99</p>
                 {% if membership.membership_type == 'student' %}
                   <button class="btn btn-secondary" disabled>Current Plan</button>
-                  <form method="post" class="mt-2">
+                  <form action="{% url 'membership_options' %}" method="post" class="mt-2">
                     {% csrf_token %}
                     <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
                   </form>
                 {% else %}
-                  <form method="post">
+                  <form action="{% url 'membership_options' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="membership_type" value="student">
                     <button type="submit" name="upgrade" class="btn btn-warning">Upgrade to Student</button>
@@ -349,12 +350,12 @@
                 <p class="card-text fw-bold">&pound;19.99</p>
                 {% if membership.membership_type == 'premium' %}
                   <button class="btn btn-secondary" disabled>Current Plan</button>
-                  <form method="post" class="mt-2">
+                  <form action="{% url 'membership_options' %}" method="post" class="mt-2">
                     {% csrf_token %}
                     <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
                   </form>
                 {% else %}
-                  <form method="post">
+                  <form action="{% url 'membership_options' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="membership_type" value="premium">
                     <button type="submit" name="upgrade" class="btn btn-warning">Upgrade to Premium</button>
@@ -366,10 +367,11 @@
         </div>
       {% else %}
         <div class="text-center">
-          <p>Please <a href="/login">login</a> to manage your membership.</p>
+          <p>Please <a href="{% url 'login' %}">login</a> to manage your membership.</p>
         </div>
       {% endif %}
     </div>
   </section>
+  
   
 {% endblock content %}
