@@ -29,7 +29,7 @@
                     class="me-2"
                 >
             </a>
-
+    
             <!-- Mobile Nav Toggler -->
             <button 
                 class="navbar-toggler" 
@@ -42,48 +42,42 @@
             >
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+    
             <!-- Nav Links -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
+                    <!-- New Nav Links -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Timetables</a>
+                        <a class="nav-link" href="{% url 'healthplan_list' %}">Health Plans</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">What We Offer</a>
+                        <a class="nav-link" href="{% url 'workoutplan_list' %}">Workout Plans</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Love It</a>
+                        <a class="nav-link" href="{% url 'workout_list' %}">Workout Classes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
                     </li>
-
-                    <!-- If User is Authenticated, show Sign Out -->
+                </ul>
+                <!-- Authentication Buttons -->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="btn btn-warning me-2" href="{% url 'logout' %}">
-                                Sign Out
-                            </a>
+                            <a class="btn btn-warning me-2" href="{% url 'logout' %}">Sign Out</a>
                         </li>
                     {% else %}
-                        <!-- Else Show My Login -->
                         <li class="nav-item">
-                            <a class="btn btn-warning me-2" href="{% url 'login' %}">
-                                My Login
-                            </a>
+                            <a class="btn btn-warning me-2" href="{% url 'login' %}">My Login</a>
                         </li>
                     {% endif %}
-
                     <li class="nav-item">
-                        <a class="btn btn-warning" href="{% url 'membership_options' %}">
-                            Become a Member
-                        </a>
+                        <a class="btn btn-warning" href="{% url 'membership_options' %}">Become a Member</a>
                     </li>
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav>    
 </header>
 
 <main>

@@ -183,32 +183,31 @@
         Explore our variety of in-gym workout classes led by certified trainers.
       </p>
   
-      <!-- Grid of Workout Class Cards -->
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+      <!-- Grid Container with 4 Columns -->
+      <div class="grid-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
         {% for workout in top_workout_classes %}
-        <div class="col">
-          <div class="card h-100 border-0 shadow" style="border-radius: 10px; overflow: hidden;">
+          <div class="card" style="background-color: #1C1C1C; border-radius: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3); text-align: center; padding: 1rem;">
             {% if workout.image %}
-            <img src="{{ workout.image.url }}" class="card-img-top" alt="{{ workout.name }}" style="height: 180px; object-fit: cover;">
+              <img src="{{ workout.image.url }}" alt="{{ workout.name }}" style="width: 100%; height: auto; border-top-left-radius: 15px; border-top-right-radius: 15px;">
             {% else %}
-            <img src="{% static 'imgs/default_workout.jpg' %}" class="card-img-top" alt="Workout Class" style="height: 180px; object-fit: cover;">
+              <img src="{% static 'imgs/default_workout.jpg' %}" alt="Workout Class" style="width: 100%; height: auto; border-top-left-radius: 15px; border-top-right-radius: 15px;">
             {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ workout.name }}</h5>
-              <p class="card-text text-muted">
-                {{ workout.difficulty }} &bull; {{ workout.length }} min
-              </p>
-            </div>
-            <div class="card-footer d-flex justify-content-between align-items-center">
-              <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning">View Class</a>
-              <span class="text-muted">£{{ workout.price }}</span>
+            <div style="padding: 1rem;">
+              <h3 style="margin: 0.5rem 0;">{{ workout.name }}</h3>
+              <p style="margin: 0.5rem 0;">{{ workout.difficulty }} &bull; {{ workout.length }} min</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning">View Class</a>
+                <span class="text-muted">£{{ workout.price }}</span>
+              </div>
             </div>
           </div>
-        </div>
+        {% empty %}
+          <p class="text-center" style="grid-column: 1 / -1;">No workout classes available at the moment.</p>
         {% endfor %}
       </div>
     </div>
   </section>
+  
   
 
 <!-- Why Choose Us Section with Left Boxes and Right Image -->
