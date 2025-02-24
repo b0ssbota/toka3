@@ -48,14 +48,13 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-uppercase">
                     <!-- New Nav Links -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'healthplan_list' %}">Health Plans</a>
+                        <a class="nav-link" href="{% url 'home' %}#health-plan">Health Plans</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'workoutplan_list' %}">Workout Plans</a>
+                        <a class="nav-link" href="{% url 'home' %}#workout-plan">Workout Plans</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#workout-classes">Workout Classes</a>
-                    </li>
+                        <a class="nav-link" href="{% url 'home' %}#workout-classes">Workout Classes</a>                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
                     </li>
@@ -72,7 +71,7 @@
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="btn btn-warning" href="{% url 'membership_options' %}">Become a Member</a>
+                        <a class="btn btn-warning" href="{% url 'home' %}#membership">Become a Member</a>
                     </li>
                 </ul>
             </div>

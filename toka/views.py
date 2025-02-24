@@ -10,6 +10,7 @@ from .models import *
 def home(request):
     top_four_health_plans = HealthPlan.objects.all()[:4]
     top_four_workout_plans = WorkoutPlan.objects.all()[:4]
+    
     context = {
         'top_four_health_plans': top_four_health_plans,
         'top_four_workout_plans': top_four_workout_plans,
