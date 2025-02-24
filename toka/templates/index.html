@@ -282,48 +282,76 @@
   </section>
   
   
-<!-- Membership Options Section --> 
-<section class="py-5 bg-light">
+<!-- Membership Pricing Section -->
+<section class="py-5" style="background-color: #f0f0f0;">
     <div class="container">
-      <h2 class="text-center fw-bold mb-4">Membership Options</h2>
-      {% if message %}
-        <div class="alert alert-info text-center">{{ message }}</div>
-      {% endif %}
-      {% if user.is_authenticated %}
-        <div class="mb-4 text-center">
-          <h4>Your Current Membership: {{ membership.membership_type|title }}</h4>
-          <p>Price: &pound;{{ membership.price }}</p>
-        </div>
-        <div class="row">
-          <!-- Free Membership -->
-          <div class="col-md-4">
-            <div class="card mb-4 shadow">
-              <img src="{% static 'imgs/free.jpg' %}" class="card-img-top" alt="Free Membership">
-              <div class="card-body text-center">
-                <h5 class="card-title">Free Membership</h5>
-                <p class="card-text">Enjoy basic access to our gym facilities.</p>
-                <p class="card-text fw-bold">&pound;0.00</p>
+      <h2 class="fw-bold text-center mb-5">We offer simple pricing plans.</h2>
+      
+      <!-- 
+        If user is NOT logged in, add "opacity-50" so it appears greyed out 
+        (read-only). If user IS logged in, remove "opacity-50" for full color.
+      -->
+      <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center
+        {% if not user.is_authenticated %} opacity-50 {% endif %}">
+  
+        <!-- FREE (Starter) Plan -->
+        <div class="col">
+          <div class="card h-100 border-0 shadow text-center p-3">
+            <div class="card-body">
+              <h4 class="fw-bold mb-3">Free</h4>
+              <h2 class="display-6 fw-bold">£0.00</h2>
+              <small class="text-muted">GBP / Month</small>
+              <hr>
+              <ul class="list-unstyled my-3">
+                <li>Basic Gym Access</li>
+                <li>Community Support</li>
+                <li><span class="text-danger">No Free Classes</span></li>
+                <li><span class="text-danger">Ads Shown</span></li>
+              </ul>
+            </div>
+            <div class="card-footer bg-white border-0">
+              {% if user.is_authenticated %}
                 {% if membership.membership_type == 'free' %}
                   <button class="btn btn-secondary" disabled>Current Plan</button>
                 {% else %}
-                  <!-- Added action attribute -->
                   <form action="{% url 'membership_options' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="membership_type" value="free">
-                    <button type="submit" name="upgrade" class="btn btn-warning">Downgrade to Free</button>
+                    <button type="submit" name="upgrade" class="btn btn-outline-primary">
+                      Switch to Free
+                    </button>
                   </form>
                 {% endif %}
-              </div>
+              {% else %}
+                <!-- Not logged in: leads to login page -->
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Sign Up</a>
+              {% endif %}
             </div>
           </div>
-          <!-- Student Membership -->
-          <div class="col-md-4">
-            <div class="card mb-4 shadow">
-              <img src="{% static 'imgs/student.jpg' %}" class="card-img-top" alt="Student Membership">
-              <div class="card-body text-center">
-                <h5 class="card-title">Student Membership</h5>
-                <p class="card-text">Special discount for students with full gym access.</p>
-                <p class="card-text fw-bold">&pound;5.99</p>
+        </div>
+        
+        <!-- STUDENT (Pro) Plan -->
+        <div class="col">
+          <div class="card h-100 border-0 shadow text-center p-3 position-relative">
+            <!-- "Most Popular" ribbon example (optional) -->
+            <span class="position-absolute top-0 start-50 translate-middle badge bg-warning text-dark" 
+                  style="z-index: 2; transform: translate(-50%, -50%);">
+              Most Popular
+            </span>
+            <div class="card-body">
+              <h4 class="fw-bold mb-3">Student</h4>
+              <h2 class="display-6 fw-bold">£5.99</h2>
+              <small class="text-muted">GBP / Month</small>
+              <hr>
+              <ul class="list-unstyled my-3">
+                <li>Full Gym Access</li>
+                <li>Up to 2 Free Classes/Month</li>
+                <li>Email Support</li>
+                <li><span class="text-danger">Ads Shown</span></li>
+              </ul>
+            </div>
+            <div class="card-footer bg-white border-0">
+              {% if user.is_authenticated %}
                 {% if membership.membership_type == 'student' %}
                   <button class="btn btn-secondary" disabled>Current Plan</button>
                   <form action="{% url 'membership_options' %}" method="post" class="mt-2">
@@ -334,20 +362,34 @@
                   <form action="{% url 'membership_options' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="membership_type" value="student">
-                    <button type="submit" name="upgrade" class="btn btn-warning">Upgrade to Student</button>
+                    <button type="submit" name="upgrade" class="btn btn-primary">Choose Plan</button>
                   </form>
                 {% endif %}
-              </div>
+              {% else %}
+                <!-- Not logged in: leads to login page -->
+                <a href="{% url 'login' %}" class="btn btn-primary">Choose Plan</a>
+              {% endif %}
             </div>
           </div>
-          <!-- Premium Membership -->
-          <div class="col-md-4">
-            <div class="card mb-4 shadow">
-              <img src="{% static 'imgs/premium.jpg' %}" class="card-img-top" alt="Premium Membership">
-              <div class="card-body text-center">
-                <h5 class="card-title">Premium Membership</h5>
-                <p class="card-text">Unlock all facilities and classes with premium access.</p>
-                <p class="card-text fw-bold">&pound;19.99</p>
+        </div>
+        
+        <!-- PREMIUM (Business) Plan -->
+        <div class="col">
+          <div class="card h-100 border-0 shadow text-center p-3">
+            <div class="card-body">
+              <h4 class="fw-bold mb-3">Premium</h4>
+              <h2 class="display-6 fw-bold">£19.99</h2>
+              <small class="text-muted">GBP / Month</small>
+              <hr>
+              <ul class="list-unstyled my-3">
+                <li>Unlimited Gym Access</li>
+                <li>Unlimited Classes</li>
+                <li>Priority Support</li>
+                <li>No Ads</li>
+              </ul>
+            </div>
+            <div class="card-footer bg-white border-0">
+              {% if user.is_authenticated %}
                 {% if membership.membership_type == 'premium' %}
                   <button class="btn btn-secondary" disabled>Current Plan</button>
                   <form action="{% url 'membership_options' %}" method="post" class="mt-2">
@@ -358,20 +400,22 @@
                   <form action="{% url 'membership_options' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="membership_type" value="premium">
-                    <button type="submit" name="upgrade" class="btn btn-warning">Upgrade to Premium</button>
+                    <button type="submit" name="upgrade" class="btn btn-outline-primary">Choose Plan</button>
                   </form>
                 {% endif %}
-              </div>
+              {% else %}
+                <!-- Not logged in: leads to login page -->
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Choose Plan</a>
+              {% endif %}
             </div>
           </div>
         </div>
-      {% else %}
-        <div class="text-center">
-          <p>Please <a href="{% url 'login' %}">login</a> to manage your membership.</p>
-        </div>
-      {% endif %}
+        
+      </div> <!-- End row -->
     </div>
   </section>
+  
+  
   
   
 {% endblock content %}
