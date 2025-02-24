@@ -284,137 +284,137 @@
   
 <!-- Membership Pricing Section -->
 <section class="py-5" style="background-color: #f0f0f0;">
-    <div class="container">
-      <h2 class="fw-bold text-center mb-5">We offer simple pricing plans.</h2>
+  <div class="container">
+    <h2 class="fw-bold text-center mb-5" style="color: #000000;">We offer simple pricing plans</h2>
+    
+    <!-- 
+      If user is NOT logged in, add "opacity-50" so it appears greyed out 
+      (read-only). If user IS logged in, remove "opacity-50" for full color.
+    -->
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center
+      {% if not user.is_authenticated %} opacity-50 {% endif %}">
+
+      <!-- FREE (Starter) Plan -->
+      <div class="col">
+        <div class="card h-100 border-0 shadow text-center p-3">
+          <div class="card-body">
+            <h4 class="fw-bold mb-3">Free</h4>
+            <h2 class="display-6 fw-bold">£0.00</h2>
+            <small class="text-muted">GBP / Month</small>
+            <hr>
+            <ul class="list-unstyled my-3">
+              <li>Basic Gym Access</li>
+              <li>Community Support</li>
+              <li><span class="text-danger">No Free Classes</span></li>
+              <li><span class="text-danger">Ads Shown</span></li>
+            </ul>
+          </div>
+          <div class="card-footer bg-white border-0">
+            {% if user.is_authenticated %}
+              {% if membership.membership_type == 'free' %}
+                <button class="btn btn-secondary" disabled>Current Plan</button>
+              {% else %}
+                <form action="{% url 'membership_options' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="membership_type" value="free">
+                  <button type="submit" name="upgrade" class="btn btn-outline-primary">
+                    Switch to Free
+                  </button>
+                </form>
+              {% endif %}
+            {% else %}
+              <!-- Not logged in: leads to login page -->
+              <a href="{% url 'login' %}" class="btn btn-outline-primary">Sign Up</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
       
-      <!-- 
-        If user is NOT logged in, add "opacity-50" so it appears greyed out 
-        (read-only). If user IS logged in, remove "opacity-50" for full color.
-      -->
-      <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center
-        {% if not user.is_authenticated %} opacity-50 {% endif %}">
-  
-        <!-- FREE (Starter) Plan -->
-        <div class="col">
-          <div class="card h-100 border-0 shadow text-center p-3">
-            <div class="card-body">
-              <h4 class="fw-bold mb-3">Free</h4>
-              <h2 class="display-6 fw-bold">£0.00</h2>
-              <small class="text-muted">GBP / Month</small>
-              <hr>
-              <ul class="list-unstyled my-3">
-                <li>Basic Gym Access</li>
-                <li>Community Support</li>
-                <li><span class="text-danger">No Free Classes</span></li>
-                <li><span class="text-danger">Ads Shown</span></li>
-              </ul>
-            </div>
-            <div class="card-footer bg-white border-0">
-              {% if user.is_authenticated %}
-                {% if membership.membership_type == 'free' %}
-                  <button class="btn btn-secondary" disabled>Current Plan</button>
-                {% else %}
-                  <form action="{% url 'membership_options' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="membership_type" value="free">
-                    <button type="submit" name="upgrade" class="btn btn-outline-primary">
-                      Switch to Free
-                    </button>
-                  </form>
-                {% endif %}
+      <!-- STUDENT (Pro) Plan -->
+      <div class="col">
+        <div class="card h-100 border-0 shadow text-center p-3 position-relative">
+          <!-- "Most Popular" ribbon example (optional) -->
+          <span class="position-absolute top-0 start-50 translate-middle badge bg-warning text-dark" 
+                style="z-index: 2; transform: translate(-50%, -50%);">
+            Most Popular
+          </span>
+          <div class="card-body">
+            <h4 class="fw-bold mb-3">Student</h4>
+            <h2 class="display-6 fw-bold">£5.99</h2>
+            <small class="text-muted">GBP / Month</small>
+            <hr>
+            <ul class="list-unstyled my-3">
+              <li>Full Gym Access</li>
+              <li>Up to 2 Free Classes/Month</li>
+              <li>Email Support</li>
+              <li><span class="text-danger">Ads Shown</span></li>
+            </ul>
+          </div>
+          <div class="card-footer bg-white border-0">
+            {% if user.is_authenticated %}
+              {% if membership.membership_type == 'student' %}
+                <button class="btn btn-secondary" disabled>Current Plan</button>
+                <form action="{% url 'membership_options' %}" method="post" class="mt-2">
+                  {% csrf_token %}
+                  <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
+                </form>
               {% else %}
-                <!-- Not logged in: leads to login page -->
-                <a href="{% url 'login' %}" class="btn btn-outline-primary">Sign Up</a>
+                <form action="{% url 'membership_options' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="membership_type" value="student">
+                  <button type="submit" name="upgrade" class="btn btn-primary">Choose Plan</button>
+                </form>
               {% endif %}
-            </div>
+            {% else %}
+              <!-- Not logged in: leads to login page -->
+              <a href="{% url 'login' %}" class="btn btn-primary">Choose Plan</a>
+            {% endif %}
           </div>
         </div>
-        
-        <!-- STUDENT (Pro) Plan -->
-        <div class="col">
-          <div class="card h-100 border-0 shadow text-center p-3 position-relative">
-            <!-- "Most Popular" ribbon example (optional) -->
-            <span class="position-absolute top-0 start-50 translate-middle badge bg-warning text-dark" 
-                  style="z-index: 2; transform: translate(-50%, -50%);">
-              Most Popular
-            </span>
-            <div class="card-body">
-              <h4 class="fw-bold mb-3">Student</h4>
-              <h2 class="display-6 fw-bold">£5.99</h2>
-              <small class="text-muted">GBP / Month</small>
-              <hr>
-              <ul class="list-unstyled my-3">
-                <li>Full Gym Access</li>
-                <li>Up to 2 Free Classes/Month</li>
-                <li>Email Support</li>
-                <li><span class="text-danger">Ads Shown</span></li>
-              </ul>
-            </div>
-            <div class="card-footer bg-white border-0">
-              {% if user.is_authenticated %}
-                {% if membership.membership_type == 'student' %}
-                  <button class="btn btn-secondary" disabled>Current Plan</button>
-                  <form action="{% url 'membership_options' %}" method="post" class="mt-2">
-                    {% csrf_token %}
-                    <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
-                  </form>
-                {% else %}
-                  <form action="{% url 'membership_options' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="membership_type" value="student">
-                    <button type="submit" name="upgrade" class="btn btn-primary">Choose Plan</button>
-                  </form>
-                {% endif %}
+      </div>
+      
+      <!-- PREMIUM (Business) Plan -->
+      <div class="col">
+        <div class="card h-100 border-0 shadow text-center p-3">
+          <div class="card-body">
+            <h4 class="fw-bold mb-3">Premium</h4>
+            <h2 class="display-6 fw-bold">£19.99</h2>
+            <small class="text-muted">GBP / Month</small>
+            <hr>
+            <ul class="list-unstyled my-3">
+              <li>Unlimited Gym Access</li>
+              <li>Unlimited Classes</li>
+              <li>Priority Support</li>
+              <li>No Ads</li>
+            </ul>
+          </div>
+          <div class="card-footer bg-white border-0">
+            {% if user.is_authenticated %}
+              {% if membership.membership_type == 'premium' %}
+                <button class="btn btn-secondary" disabled>Current Plan</button>
+                <form action="{% url 'membership_options' %}" method="post" class="mt-2">
+                  {% csrf_token %}
+                  <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
+                </form>
               {% else %}
-                <!-- Not logged in: leads to login page -->
-                <a href="{% url 'login' %}" class="btn btn-primary">Choose Plan</a>
+                <form action="{% url 'membership_options' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="membership_type" value="premium">
+                  <button type="submit" name="upgrade" class="btn btn-outline-primary">Choose Plan</button>
+                </form>
               {% endif %}
-            </div>
+            {% else %}
+              <!-- Not logged in: leads to login page -->
+              <a href="{% url 'login' %}" class="btn btn-outline-primary">Choose Plan</a>
+            {% endif %}
           </div>
         </div>
-        
-        <!-- PREMIUM (Business) Plan -->
-        <div class="col">
-          <div class="card h-100 border-0 shadow text-center p-3">
-            <div class="card-body">
-              <h4 class="fw-bold mb-3">Premium</h4>
-              <h2 class="display-6 fw-bold">£19.99</h2>
-              <small class="text-muted">GBP / Month</small>
-              <hr>
-              <ul class="list-unstyled my-3">
-                <li>Unlimited Gym Access</li>
-                <li>Unlimited Classes</li>
-                <li>Priority Support</li>
-                <li>No Ads</li>
-              </ul>
-            </div>
-            <div class="card-footer bg-white border-0">
-              {% if user.is_authenticated %}
-                {% if membership.membership_type == 'premium' %}
-                  <button class="btn btn-secondary" disabled>Current Plan</button>
-                  <form action="{% url 'membership_options' %}" method="post" class="mt-2">
-                    {% csrf_token %}
-                    <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
-                  </form>
-                {% else %}
-                  <form action="{% url 'membership_options' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="membership_type" value="premium">
-                    <button type="submit" name="upgrade" class="btn btn-outline-primary">Choose Plan</button>
-                  </form>
-                {% endif %}
-              {% else %}
-                <!-- Not logged in: leads to login page -->
-                <a href="{% url 'login' %}" class="btn btn-outline-primary">Choose Plan</a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-        
-      </div> <!-- End row -->
-    </div>
-  </section>
-  
+      </div>
+      
+    </div> <!-- End row -->
+  </div>
+</section>
+
   
   
   

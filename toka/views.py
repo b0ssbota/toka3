@@ -10,10 +10,26 @@ from .models import *
 def home(request):
     top_four_health_plans = HealthPlan.objects.all()[:4]
     top_four_workout_plans = WorkoutPlan.objects.all()[:4]
-    return render(request, 'index.html', {
+    context = {
         'top_four_health_plans': top_four_health_plans,
-        'top_four_workout_plans': top_four_workout_plans
-    })
+        'top_four_workout_plans': top_four_workout_plans,
+    }
+    if request.user.is_authenticated:
+        # Get or create membership for the user
+        membership, created = Membership.objects.get_or_create(
+            user=request.user,
+            defaults={'membership_type': 'free', 'price': 0.00}
+        )
+        context['membership'] = membership
+        
+        # Optionally, check for a membership message from a previous update
+        if 'membership_message' in request.session:
+            context['message'] = request.session.pop('membership_message')
+    return render(request, 'index.html', context)
+
+
+
+
 
 def signup(request):
     if request.method == "POST":
