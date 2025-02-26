@@ -8,25 +8,34 @@ from .forms import LoginForm, SignupForm
 from .models import *
 
 def home(request):
+    # Query top 4 items
     top_four_health_plans = HealthPlan.objects.all()[:4]
     top_four_workout_plans = WorkoutPlan.objects.all()[:4]
-    
+    top_four_workouts = WorkoutClass.objects.all()[:4]
+
     context = {
         'top_four_health_plans': top_four_health_plans,
         'top_four_workout_plans': top_four_workout_plans,
+        'top_four_workouts': top_four_workouts
     }
+
     if request.user.is_authenticated:
-        # Get or create membership for the user
+        # Fetch or create a membership for the user
         membership, created = Membership.objects.get_or_create(
             user=request.user,
             defaults={'membership_type': 'free', 'price': 0.00}
         )
         context['membership'] = membership
-        
-        # Optionally, check for a membership message from a previous update
+
+        # Determine if the user is a paid member (anything other than 'free')
+        context['is_member'] = (membership.membership_type != 'free')
+
+        # Optionally check for a membership message stored in the session
         if 'membership_message' in request.session:
             context['message'] = request.session.pop('membership_message')
+
     return render(request, 'index.html', context)
+
 
 
 

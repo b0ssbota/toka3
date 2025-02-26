@@ -169,44 +169,65 @@
 
 <!-- Subscription and Join Us Section -->
 
-<!-- Workout Classes Section -->
-<section  id="workout-classes" class="py-5 bg-light text-dark">
-    <div class="container">
-      <!-- Section Heading & "See All Classes" Link -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fw-bold">Workout Classes</h2>
-        <a href="{% url 'workout_list' %}" class="text-decoration-none">See All Classes</a>
-      </div>
-  
-      <!-- Short Description -->
-      <p class="mb-4">
-        Explore our variety of in-gym workout classes led by certified trainers.
-      </p>
-  
-      <!-- Grid Container with 4 Columns -->
-      <div class="grid-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
-        {% for workout in top_workout_classes %}
-          <div class="card" style="background-color: #1C1C1C; border-radius: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3); text-align: center; padding: 1rem;">
-            {% if workout.image %}
-              <img src="{{ workout.image.url }}" alt="{{ workout.name }}" style="width: 100%; height: auto; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-            {% else %}
-              <img src="{% static 'imgs/default_workout.jpg' %}" alt="Workout Class" style="width: 100%; height: auto; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-            {% endif %}
-            <div style="padding: 1rem;">
-              <h3 style="margin: 0.5rem 0;">{{ workout.name }}</h3>
-              <p style="margin: 0.5rem 0;">{{ workout.difficulty }} &bull; {{ workout.length }} min</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning">View Class</a>
-                <span class="text-muted">£{{ workout.price }}</span>
-              </div>
-            </div>
-          </div>
-        {% empty %}
-          <p class="text-center" style="grid-column: 1 / -1;">No workout classes available at the moment.</p>
-        {% endfor %}
-      </div>
+<!-- Top Workout Classes Section -->
+<section class="py-5 bg-light text-dark">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fw-bold">Workout Classes</h2>
+      <a href="{% url 'workout_list' %}" class="text-decoration-none">See All Classes</a>
     </div>
-  </section>
+    <p class="mb-4">
+      Explore our variety of in-gym workout classes led by certified trainers.
+    </p>
+    
+    <!-- Grid Container with 4 Columns -->
+    <div class="grid-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+      {% for workout in top_workout_classes %}
+        <div class="card"
+             style="background-color: #1C1C1C; 
+                    border-radius: 15px; 
+                    overflow: hidden; 
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
+                    text-align: center; 
+                    padding: 1rem;">
+          {% if workout.image %}
+            <img src="{{ workout.image.url }}" 
+                 alt="{{ workout.name }}" 
+                 style="width: 100%; height: auto; 
+                        border-top-left-radius: 15px; 
+                        border-top-right-radius: 15px;">
+          {% else %}
+            <img src="{% static 'imgs/default_workout.jpg' %}" 
+                 alt="Workout Class" 
+                 style="width: 100%; height: auto; 
+                        border-top-left-radius: 15px; 
+                        border-top-right-radius: 15px;">
+          {% endif %}
+          <div style="padding: 1rem;">
+            <h3 style="margin: 0.5rem 0;">{{ workout.name }}</h3>
+            <p style="margin: 0.5rem 0;">
+              <strong>Difficulty:</strong> {{ workout.difficulty }}<br>
+              <strong>Length:</strong> {{ workout.length }} min<br>
+              <strong>Price:</strong> £{{ workout.price }}
+            </p>
+            
+            <!-- Members-Only Logic -->
+            {% if is_member or not workout.members_only %}
+              <!-- If user is a member or the class is not restricted -->
+              <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">Start Class</a>
+            {% else %}
+              <!-- If user isn't a member and class is restricted -->
+              <button class="btn btn-secondary w-100" disabled>Members Only</button>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center" style="grid-column: 1 / -1;">No workout classes available at the moment.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
   
   
 
