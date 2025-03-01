@@ -2,27 +2,48 @@
 {% load static %}
 
 {% block content %}
-<div class="container" style="padding: 2rem 0;">
-  <h1 class="text-center" style="margin-bottom: 2rem;">Workout Plans</h1>
-  
-  <!-- Grid container with 4 columns and gaps between cards -->
-  <div class="grid-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
-    {% for plan in plans %}
-      <div class="card" style="background-color: #1C1C1C; border-radius: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.3); text-align: center; padding: 1rem;">
-        {% if plan.image %}
-          <img src="{{ plan.image.url }}" alt="{{ plan.title }}" style="width: 100%; height: auto; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-        {% else %}
-          <img src="{% static 'imgs/default_plan.jpg' %}" alt="{{ plan.title }}" style="width: 100%; height: auto; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-        {% endif %}
-        <div style="padding: 1rem;">
-          <h3 style="margin: 0.5rem 0;">{{ plan.title }}</h3>
-          <p style="margin: 0.5rem 0;">Price: £{{ plan.price }}</p>
-          <a href="{% url 'workoutplan_detail' plan.id %}" class="btn-cta" style="margin-top: 10px; display: inline-block;">View Plan</a>
+<section id="workout-plan" class="py-5 bg-white text-dark">
+  <div class="container">
+    <!-- Section Heading & "See More Plans" Link -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fw-bold">Workout Plans</h2>
+      <a href="{% url 'workoutplan_list' %}" class="text-decoration-none">See More Plans</a>
+    </div>
+    
+    <!-- Short Description -->
+    <p class="mb-4">
+      Explore our top 4 curated workout plans, carefully designed to help you reach your fitness goals.
+    </p>
+
+    <!-- Grid Container with 4 Columns -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      {% for plan in plans %}
+      <div class="col">
+        <div class="card h-100 border-0 shadow" style="border-radius: 15px; overflow: hidden;">
+          {% if plan.image %}
+            <img src="{{ plan.image.url }}" 
+                 class="card-img-top" 
+                 alt="{{ plan.title }}" 
+                 style="height: 180px; object-fit: cover;">
+          {% else %}
+            <img src="{% static 'imgs/default_plan.jpg' %}" 
+                 class="card-img-top" 
+                 alt="{{ plan.title }}" 
+                 style="height: 180px; object-fit: cover;">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title fw-bold">{{ plan.title }}</h5>
+            <p class="text-muted mb-2">{{ plan.created_at|date:"F j, Y" }}</p>
+            <p class="card-text mb-2">{{ plan.description|truncatewords:15 }}</p>
+            <p class="fw-bold mb-0">£{{ plan.price }}</p>
+            <a href="{% url 'workoutplan_detail' plan.id %}" class="btn-cta" style="margin-top: 10px; display: inline-block;">View Plan</a>
+          </div>
         </div>
       </div>
-    {% empty %}
+      {% empty %}
       <p class="text-center" style="grid-column: 1 / -1;">No workout plans available at the moment.</p>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
-</div>
-{% endblock %}
+</section>
+{% endblock content %}
