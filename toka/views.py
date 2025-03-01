@@ -96,6 +96,10 @@ def workout_detail(request, id):
     workout = get_object_or_404(WorkoutClass, id=id)
     return render(request, "workoutclassindividual.html", {"workout": workout})
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Membership
+
 @login_required
 def membership_options(request):
     user = request.user
@@ -131,11 +135,12 @@ def membership_options(request):
                 message = "Your membership has been cancelled. You are now on a Free membership."
             else:
                 message = "You are already on a Free membership."
-    context = {
-        'membership': membership,
-        'message': message,
-    }
-    return render(request, 'index.html', context)
+        # Store message in session so it can be displayed on the home page
+        request.session['membership_message'] = message
+        return redirect('home')  # Redirect back to the home page
+    # For GET requests, simply redirect back to home (since the membership form is embedded on home)
+    return redirect('home')
+
 
 def about_us(request):
     return render(request, 'aboutus.html')

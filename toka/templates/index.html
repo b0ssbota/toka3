@@ -188,6 +188,7 @@
       {% for workout in top_four_workouts %}
         <div class="col">
           <div class="card h-100 border-0 shadow" style="border-radius: 15px; overflow: hidden;">
+            <!-- Workout Image -->
             {% if workout.image %}
               <img 
                 src="{{ workout.image.url }}" 
@@ -203,22 +204,40 @@
                 style="height: 180px; object-fit: cover;"
               >
             {% endif %}
+            
+            <!-- Card Body -->
             <div class="card-body text-start">
-              <!-- Title -->
               <h5 class="card-title fw-bold">{{ workout.name }}</h5>
-              <!-- Optional: Show a date if you store one (e.g., created_at) -->
               <p class="text-muted mb-1">{{ workout.created_at|date:"F j, Y" }}</p>
-              <!-- Short description (truncate if it's long) -->
               <p class="mb-2">
                 {{ workout.description|truncatewords:15 }}
               </p>
-              <!-- Price (or difficulty/length, if preferred) -->
               <p class="fw-bold mb-0">£{{ workout.price }}</p>
             </div>
+            
+            <!-- Card Footer: Members-Only Logic -->
             <div class="card-footer bg-white border-0 text-center">
-              <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">
-                View Class
-              </a>
+              {% if workout.members_only %}
+                {% if user.is_authenticated %}
+                  {% if is_member %}
+                    <!-- Logged in + member => can view -->
+                    <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">
+                      View Class
+                    </a>
+                  {% else %}
+                    <!-- Logged in + not a member => members only -->
+                    <button class="btn btn-secondary w-100" disabled>Members Only</button>
+                  {% endif %}
+                {% else %}
+                  <!-- Not logged in => sign up button -->
+                  <a href="{% url 'login' %}" class="btn btn-danger w-100">Login</a>
+                {% endif %}
+              {% else %}
+                <!-- Not members_only => open to all -->
+                <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">
+                  View Class
+                </a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -228,6 +247,7 @@
     </div>
   </div>
 </section>
+
 
 
 

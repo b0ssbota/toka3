@@ -1,54 +1,13 @@
 {% extends 'base.html' %}
-{% load static %}  {# Needed if you use {% static '...' %} for placeholders #}
-
 {% block content %}
 <section class="py-5">
-  <div class="container">
-
-    <!-- Title section -->
-    <div class="row mb-4">
-      <div class="col text-center">
-        <h1 class="display-4">{{ workout.name }}</h1>
-        <p class="text-muted mb-0">
-          <strong>Difficulty:</strong> {{ workout.difficulty }}
-        </p>
-      </div>
+    <div class="container text-center">
+        <h2>{{ workout.name }}</h2>
+        <p><strong>Difficulty:</strong> {{ workout.difficulty }}</p>
+        <p><strong>Length:</strong> {{ workout.length }} minutes</p>
+        <p><strong>Price:</strong> £{{ workout.price }}</p>
+        <p>{{ workout.description }}</p>
+        <img src="{{ workout.image.url }}" alt="{{ workout.name }}" class="img-fluid">
     </div>
-
-    <!-- Workout details row -->
-    <div class="row align-items-center">
-
-      <!-- Workout image -->
-      <div class="col-md-6 text-center mb-4 mb-md-0">
-        {% if workout.image %}
-          <img src="{{ workout.image.url }}" alt="{{ workout.name }}" class="img-fluid rounded shadow">
-        {% else %}
-          <!-- Fallback or placeholder image -->
-          <img src="{% static 'images/placeholder.jpg' %}" alt="No image available" class="img-fluid rounded shadow">
-        {% endif %}
-      </div>
-
-      <!-- Workout info -->
-      <div class="col-md-6">
-        <div class="p-4">
-          <p class="lead">
-            <strong>Length:</strong> {{ workout.length }} minutes
-          </p>
-          <p class="lead">
-            <strong>Price:</strong> £{{ workout.price|floatformat:2 }}
-          </p>
-          <p>
-            {{ workout.description|default:"No description available." }}
-          </p>
-
-          <!-- Potential action button (replace URL as needed) -->
-          <a href="{% url 'purchase_workout' workout.id %}" class="btn btn-primary mt-3">
-            Buy Now
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </div>
 </section>
 {% endblock content %}
