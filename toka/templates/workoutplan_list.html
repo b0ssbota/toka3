@@ -7,8 +7,21 @@
     <!-- Section Heading & "See More Plans" Link -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="fw-bold">Workout Plans</h2>
-      <a href="{% url 'workoutplan_list' %}" class="text-decoration-none">See More Plans</a>
     </div>
+
+    <!-- Filter Options -->
+    <div class="mb-4">
+      <a href="{% url 'workoutplan_list' %}?filter=all" class="btn btn-outline-secondary {% if filter == 'all' %}active{% endif %}">
+        All Plans
+      </a>
+      <a href="{% url 'workoutplan_list' %}?filter=purchased" class="btn btn-outline-secondary {% if filter == 'purchased' %}active{% endif %}">
+        Purchased Plans
+      </a>
+      <a href="{% url 'workoutplan_list' %}?filter=not_purchased" class="btn btn-outline-secondary {% if filter == 'not_purchased' %}active{% endif %}">
+        Not Purchased Plans
+      </a>
+    </div>
+
     
     <!-- Short Description -->
     <p class="mb-4">
