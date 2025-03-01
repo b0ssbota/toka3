@@ -86,57 +86,55 @@
     </div>
 </section>
 
-<!-- Top 4 Workout Plans Section -->
 <section id="workout-plan" class="py-5 bg-white text-dark">
-    <div class="container">
-        <!-- Heading & "See More" Link -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="fw-bold">Workout Plans</h2>
-            <a href="{% url 'workoutplan_list' %}" class="text-decoration-none">See More Plans</a>
-        </div>
-        
-        <!-- Short Description -->
-        <p class="mb-4">
-            Explore our top 4 curated workout plans, carefully designed to help you reach your fitness goals.
-        </p>
-
-        <!-- Row of 4 Plans -->
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            {% for plan in top_four_workout_plans %}
-            <div class="col">
-                <div class="card h-100 border-0 shadow">
-                    <!-- Plan Image (if your WorkoutPlan model has an image field) -->
-                    {% if plan.image %}
-                        <img 
-                            src="{{ plan.image.url }}" 
-                            class="card-img-top" 
-                            alt="{{ plan.title }}"
-                            style="height: 180px; object-fit: cover;"
-                        >
-                    {% else %}
-                        <!-- Fallback image -->
-                        <img 
-                            src="{% static 'imgs/default_plan.jpg' %}" 
-                            class="card-img-top" 
-                            alt="Workout Plan"
-                            style="height: 180px; object-fit: cover;"
-                        >
-                    {% endif %}
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ plan.title }}</h5>
-                        <!-- Optional: display creation date -->
-                        <p class="text-muted mb-2">{{ plan.created_at|date:"F j, Y" }}</p>
-                        <!-- Short description (truncate to 15 words) -->
-                        <p class="card-text mb-2">{{ plan.description|truncatewords:15 }}</p>
-                        <p class="fw-bold mb-0">£{{ plan.price }}</p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+  <div class="container">
+    <!-- Heading & "See More" Link -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fw-bold">Workout Plans</h2>
+      <a href="{% url 'workoutplan_list' %}" class="text-decoration-none">See More Plans</a>
     </div>
+    
+    <!-- Short Description -->
+    <p class="mb-4">
+      Explore our top 4 curated workout plans, carefully designed to help you reach your fitness goals.
+    </p>
+
+    <!-- Row of 4 Plans -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      {% for plan in top_four_workout_plans %}
+      <div class="col">
+        <div class="card h-100 border-0 shadow" style="border-radius: 15px; overflow: hidden;">
+          {% if plan.image %}
+            <img 
+              src="{{ plan.image.url }}" 
+              class="card-img-top" 
+              alt="{{ plan.title }}"
+              style="height: 180px; object-fit: cover;"
+            >
+          {% else %}
+            <img 
+              src="{% static 'imgs/default_plan.jpg' %}" 
+              class="card-img-top" 
+              alt="Workout Plan"
+              style="height: 180px; object-fit: cover;"
+            >
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ plan.title }}</h5>
+            <p class="text-muted mb-2">{{ plan.created_at|date:"F j, Y" }}</p>
+            <p class="card-text mb-2">{{ plan.description|truncatewords:15 }}</p>
+            <p class="fw-bold mb-0">£{{ plan.price }}</p>
+            <a href="{% url 'workoutplan_detail' plan.id %}" class="btn-cta" style="margin-top: 10px; display: inline-block;">View Plan</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-center">No workout classes available at the moment.</p>
+      {% endfor %}
+    </div>
+  </div>
 </section>
+
 <!-- What We Offer Section -->
 <!-- <section class="py-5 bg-dark text-white text-center">
     <div class="container">
