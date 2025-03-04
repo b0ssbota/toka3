@@ -2,34 +2,48 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="card shadow-sm">
-    {% if plan.image %}
-      <img src="{{ plan.image.url }}" class="card-img-top" alt="{{ plan.title }}" style="object-fit: cover; height: 300px;">
-    {% endif %}
-    <div class="card-body">
-      <h1 class="card-title">{{ plan.title }}</h1>
-      <p class="card-text"><strong>Price:</strong> £{{ plan.price }}</p>
-      <p class="card-text">{{ plan.description }}</p>
-      
-      {% if user.is_authenticated %}
-        {% if purchased %}
-          <hr>
-          <div class="workout-content">
-            {{ plan.content|linebreaks }}
-          </div>
-        {% else %}
-          <div class="alert alert-warning" role="alert">
-            You must purchase this plan to view the full content.
-          </div>
-          <a href="{% url 'purchase_workoutplan' plan.id %}" class="btn btn-primary">Purchase this Plan</a>
-        {% endif %}
+<div class="container py-5" style="background-color: #ffffff;">
+  <div class="card shadow-sm border-0">
+    <div class="row g-0">
+      <!-- Left Column: Plan Image -->
+      {% if plan.image %}
+      <div class="col-md-4">
+        <img src="{{ plan.image.url }}" alt="{{ plan.title }}" class="img-fluid rounded-start" style="object-fit: cover; height: 100%; width: 100%;">
+      </div>
       {% else %}
-        <div class="alert alert-info" role="alert">
-          Please <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">log in</a> to purchase and view the full workout plan.
-        </div>
+      <div class="col-md-4">
+        <img src="{% static 'imgs/default_plan.jpg' %}" alt="{{ plan.title }}" class="img-fluid rounded-start" style="object-fit: cover; height: 100%; width: 100%;">
+      </div>
       {% endif %}
+
+      <!-- Right Column: Plan Details -->
+      <div class="col-md-8">
+        <div class="card-body">
+          <h1 class="card-title">{{ plan.title }}</h1>
+          <p class="card-text"><strong>Price:</strong> £{{ plan.price }}</p>
+          <p class="card-text">{{ plan.description }}</p>
+          
+          {% if user.is_authenticated %}
+            {% if purchased %}
+              <hr>
+              <div class="workout-content">
+                {{ plan.content|linebreaks }}
+              </div>
+            {% else %}
+              <div class="alert alert-warning" role="alert">
+                You must purchase this plan to view the full content.
+              </div>
+              <a href="{% url 'purchase_workoutplan' plan.id %}" class="btn btn-primary">Purchase this Plan</a>
+            {% endif %}
+          {% else %}
+            <div class="alert alert-info" role="alert">
+              Please <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">log in</a> to purchase and view the full workout plan.
+            </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
 {% endblock %}
+
