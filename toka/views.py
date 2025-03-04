@@ -184,16 +184,20 @@ def workoutplan_detail(request, id):
     return render(request, 'workoutplan_detail.html', context)
 
 
+
+
 @login_required
 def purchase_workoutplan(request, id):
     plan = get_object_or_404(WorkoutPlan, id=id)
     # Check if the plan has already been purchased
     if WorkoutPlanPurchase.objects.filter(user=request.user, workout_plan=plan).exists():
-        return HttpResponseRedirect("/plan-purchases/")  # Redirect if already purchased
+        return redirect('workoutplan_detail', id=plan.id)  # Redirect if already purchased
 
     # Integrate your payment gateway here. For now, assume payment is successful.
     WorkoutPlanPurchase.objects.create(user=request.user, workout_plan=plan)
-    return HttpResponseRedirect("/plan-purchases/")
+    return redirect('workoutplan_detail', id=plan.id)
+
+
 
 @login_required
 def plan_purchase_list(request):
