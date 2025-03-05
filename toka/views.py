@@ -239,15 +239,17 @@ def healthplan_detail(request, id):
     }
     return render(request, 'healthplan_detail.html', context)
 
+
+
 @login_required
 def purchase_healthplan(request, id):
     plan = get_object_or_404(HealthPlan, id=id)
     # Check if already purchased
     if HealthPlanPurchase.objects.filter(user=request.user, health_plan=plan).exists():
-        return redirect('healthplan_purchase_list')
+        return redirect('healthplan_detail', id=plan.id)
     # Payment integration goes here. For now, assume success.
     HealthPlanPurchase.objects.create(user=request.user, health_plan=plan)
-    return redirect('healthplan_purchase_list')
+    return redirect('healthplan_detail', id=plan.id)
 
 @login_required
 def healthplan_purchase_list(request):
