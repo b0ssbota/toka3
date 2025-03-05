@@ -1,13 +1,30 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <section class="py-5">
-    <div class="container text-center">
-        <h2>{{ workout.name }}</h2>
-        <p><strong>Difficulty:</strong> {{ workout.difficulty }}</p>
-        <p><strong>Length:</strong> {{ workout.length }} minutes</p>
-        <p><strong>Price:</strong> £{{ workout.price }}</p>
-        <p>{{ workout.description }}</p>
-        <img src="{{ workout.image.url }}" alt="{{ workout.name }}" class="img-fluid">
+  <div class="container">
+    <!-- Center the card and limit its width -->
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 900px; border-radius: 15px; overflow: hidden;">
+      <div class="row g-0">
+        <!-- Left Column: Workout Image -->
+        <div class="col-md-4">
+          {% if workout.image %}
+            <img src="{{ workout.image.url }}" alt="{{ workout.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+          {% else %}
+            <img src="{% static 'imgs/default_workout.jpg' %}" alt="{{ workout.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
+          {% endif %}
+        </div>
+        <!-- Right Column: Workout Details -->
+        <div class="col-md-8 p-4">
+          <h2 class="mb-3">{{ workout.name }}</h2>
+          <p><strong>Difficulty:</strong> {{ workout.difficulty }}</p>
+          <p><strong>Length:</strong> {{ workout.length }} minutes</p>
+          <p><strong>Price:</strong> £{{ workout.price }}</p>
+          <p>{{ workout.description }}</p>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
-{% endblock content %}
+{% endblock %}
