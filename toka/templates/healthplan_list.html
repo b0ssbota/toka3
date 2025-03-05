@@ -2,28 +2,65 @@
 {% load static %}
 
 {% block content %}
-  <h1>Health Plans</h1>
-  
-  <!-- Filter Options -->
-  <div class="mb-4">
-    <a href="{% url 'healthplan_list' %}?filter=all" class="btn btn-outline-secondary {% if filter == 'all' %}active{% endif %}">
-      All Plans
-    </a>
-    <a href="{% url 'healthplan_list' %}?filter=purchased" class="btn btn-outline-secondary {% if filter == 'purchased' %}active{% endif %}">
-      Purchased Plans
-    </a>
-    <a href="{% url 'healthplan_list' %}?filter=not_purchased" class="btn btn-outline-secondary {% if filter == 'not_purchased' %}active{% endif %}">
-      Not Purchased Plans
-    </a>
+<section id="health-plan" class="py-5 bg-white text-dark">
+  <div class="container">
+    <!-- Section Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fw-bold">Health Plans</h2>
+    </div>
+
+    <!-- Filter Options -->
+    <div class="mb-4">
+      <a href="{% url 'healthplan_list' %}?filter=all" class="btn btn-outline-secondary {% if filter == 'all' %}active{% endif %}">
+        All Plans
+      </a>
+      <a href="{% url 'healthplan_list' %}?filter=purchased" class="btn btn-outline-secondary {% if filter == 'purchased' %}active{% endif %}">
+        Purchased Plans
+      </a>
+      <a href="{% url 'healthplan_list' %}?filter=not_purchased" class="btn btn-outline-secondary {% if filter == 'not_purchased' %}active{% endif %}">
+        Not Purchased Plans
+      </a>
+    </div>
+
+    <!-- Short Description -->
+    <p class="mb-4">
+      Explore our curated health plans, carefully designed to guide you toward better well-being.
+    </p>
+
+    <!-- Grid Container with 4 Columns -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      {% for plan in plans %}
+      <div class="col">
+        <div class="card h-100 border-0 shadow" style="border-radius: 15px; overflow: hidden;">
+          {% if plan.image %}
+            <img 
+              src="{{ plan.image.url }}" 
+              class="card-img-top" 
+              alt="{{ plan.title }}" 
+              style="height: 180px; object-fit: cover;"
+            >
+          {% else %}
+            <img 
+              src="{% static 'imgs/default_plan.jpg' %}" 
+              class="card-img-top" 
+              alt="{{ plan.title }}" 
+              style="height: 180px; object-fit: cover;"
+            >
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title fw-bold">{{ plan.title }}</h5>
+            <!-- Adjust the date field if your HealthPlan model has a different name -->
+            <p class="text-muted mb-2">{{ plan.created_at|date:"F j, Y" }}</p>
+            <p class="card-text mb-2">{{ plan.description|truncatewords:15 }}</p>
+            <p class="fw-bold mb-0">£{{ plan.price }}</p>
+            <a href="{% url 'healthplan_detail' plan.id %}" class="btn-cta" style="margin-top: 10px; display: inline-block;">View Plan</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center" style="grid-column: 1 / -1;">No health plans available at the moment.</p>
+      {% endfor %}
+    </div>
   </div>
-  
-  <ul>
-    {% for plan in plans %}
-      <li>
-        <a href="{% url 'healthplan_detail' plan.id %}">{{ plan.title }}</a> – £{{ plan.price }}
-      </li>
-    {% empty %}
-      <li>No health plans available under this filter.</li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+</section>
+{% endblock content %}
