@@ -78,6 +78,7 @@
                         <!-- Short description (15 words) -->
                         <p class="card-text mb-2">{{ plan.description|truncatewords:15 }}</p>
                         <p class="fw-bold mb-0">£{{ plan.price }}</p>
+                        <a href="{% url 'healthplan_detail' plan.id %}" class="btn-cta" style="margin-top: 10px; display: inline-block;">View Plan</a>
                     </div>
                 </div>
             </div>
