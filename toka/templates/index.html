@@ -331,7 +331,7 @@
       (read-only). If user IS logged in, remove "opacity-50" for full color.
     -->
     <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center
-      {% if not user.is_authenticated %} opacity-50 {% endif %}">
+      {% if not user.is_authenticated %}  {% endif %}">
 
       <!-- FREE (Starter) Plan -->
       <div class="col">
