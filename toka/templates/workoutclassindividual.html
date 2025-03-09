@@ -2,28 +2,43 @@
 {% load static %}
 
 {% block content %}
-<section style="background-color: #ffffff; min-height: 100vh;">
-  <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-    <div class="card shadow-sm border-0" style="max-width: 900px; border-radius: 15px; overflow: hidden;">
-      <div class="row g-0">
-        <!-- Left Column: Plan Image -->
-        <div class="col-md-4">
-          {% if workout.image %}
-            <img src="{{ workout.image.url }}" alt="{{ workout.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
-          {% else %}
-            <img src="{% static 'imgs/default_workout.jpg' %}" alt="{{ workout.name }}" class="img-fluid h-100 w-100" style="object-fit: cover;">
-          {% endif %}
-        </div>
-        <!-- Right Column: Plan Details -->
-        <div class="col-md-8 p-4">
-          <h2 class="mb-3">{{ workout.name }}</h2>
-          <p><strong>Difficulty:</strong> {{ workout.difficulty }}</p>
-          <p><strong>Length:</strong> {{ workout.length }} minutes</p>
-          <p><strong>Price:</strong> £{{ workout.price }}</p>
-          <p>{{ workout.description }}</p>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: #ffffff;">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-xl-10">
+        <div class="card border-0 shadow" style="border-radius: 15px; overflow: hidden;">
+          <div class="row g-0 h-100">
+            <!-- Left Column: Full-height image with no extra padding -->
+            <div class="col-md-5 p-0">
+              {% if workout.image %}
+                <img 
+                  src="{{ workout.image.url }}" 
+                  alt="{{ workout.name }}" 
+                  class="img-fluid h-100 w-100" 
+                  style="object-fit: cover;"
+                >
+              {% else %}
+                <img 
+                  src="{% static 'imgs/default_workout.jpg' %}" 
+                  alt="{{ workout.name }}" 
+                  class="img-fluid h-100 w-100" 
+                  style="object-fit: cover;"
+                >
+              {% endif %}
+            </div>
+
+            <!-- Right Column: Workout Details -->
+            <div class="col-md-7 p-4 d-flex flex-column">
+              <h2 class="mb-3">{{ workout.name }}</h2>
+              <p><strong>Difficulty:</strong> {{ workout.difficulty }}</p>
+              <p><strong>Length:</strong> {{ workout.length }} minutes</p>
+              <p><strong>Price:</strong> £{{ workout.price }}</p>
+              <p>{{ workout.description }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 {% endblock %}

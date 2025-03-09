@@ -2,34 +2,29 @@
 {% load static %}
 
 {% block content %}
-<!-- Full-page wrapper with vertical/horizontal centering -->
 <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: #ffffff;">
-  <div class="container py-5">
+  <div class="container-fluid">
     <div class="row justify-content-center">
-      <div class="col-md-10">
-        <div class="card border-0 shadow" style="border-radius: 15px; overflow: hidden; min-height: 600px;">
+      <div class="col-xl-10">
+        <div class="card border-0 shadow" style="border-radius: 15px; overflow: hidden;">
           <div class="row g-0 h-100">
-            <!-- Left Column: Full-height image -->
-            <div class="col-md-5 h-100">
+            <!-- Left Column: Full-height image without padding -->
+            <div class="col-md-5 col-lg-5 p-0">
               {% if plan.image %}
-                <img 
-                  src="{{ plan.image.url }}" 
-                  alt="{{ plan.title }}" 
-                  class="img-fluid h-100 w-100" 
-                  style="object-fit: cover;"
-                >
+                <img src="{{ plan.image.url }}" 
+                     alt="{{ plan.title }}" 
+                     class="img-fluid h-100 w-100" 
+                     style="object-fit: cover; margin-bottom: 0;">
               {% else %}
-                <img 
-                  src="{% static 'imgs/default_plan.jpg' %}" 
-                  alt="{{ plan.title }}" 
-                  class="img-fluid h-100 w-100" 
-                  style="object-fit: cover;"
-                >
+                <img src="{% static 'imgs/default_plan.jpg' %}" 
+                     alt="{{ plan.title }}" 
+                     class="img-fluid h-100 w-100" 
+                     style="object-fit: cover; margin-bottom: 0;">
               {% endif %}
             </div>
 
             <!-- Right Column: Plan Details -->
-            <div class="col-md-7 p-5 d-flex flex-column">
+            <div class="col-md-7 col-lg-7 p-4 d-flex flex-column">
               <h1 class="mb-3">{{ plan.title }}</h1>
               <p><strong>Price:</strong> £{{ plan.price }}</p>
               <p>{{ plan.description }}</p>
@@ -50,11 +45,7 @@
                 {% endif %}
               {% else %}
                 <div class="alert alert-info" role="alert">
-                  Please 
-                  <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">
-                    log in
-                  </a> 
-                  to purchase and view the full Health Plan.
+                  Please <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">log in</a> to purchase and view the full Health Plan.
                 </div>
               {% endif %}
             </div>
