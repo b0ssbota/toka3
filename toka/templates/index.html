@@ -3,15 +3,21 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="position-relative text-white" style="background: url('{% static 'imgs/gym.jpg' %}') center/cover no-repeat; min-height: 100vh;">
-    <div class="d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 100vh; background-color: rgba(0,0,0,0.5);">
-        <h1 class="display-3 fw-bold">SHAPE YOUR BODY</h1>
-        <h2 class="display-5 text-warning">BE STRONG</h2>
-        <h3 class="mb-4">TRAINING HARD</h3>
-        <a href="{% url 'signup' %}" class="btn btn-warning btn-lg mb-3">Get Started</a>
-        <a href="{% url 'home' %}" class="btn btn-outline-light btn-lg">Learn More</a>
+<section class="position-relative text-white" 
+         style="background: url('{% static 'imgs/gym.jpg' %}') center/cover no-repeat; min-height: 100vh;">
+  <div class="d-flex flex-column align-items-center justify-content-center text-center" 
+       style="min-height: 100vh; background-color: rgba(0,0,0,0.5);">
+    <h1 class="display-3 fw-bold">SHAPE YOUR BODY</h1>
+    <h2 class="display-5 text-warning">BE STRONG</h2>
+    <h3 class="mb-4">TRAINING HARD</h3>
+    <!-- Flex container for the buttons -->
+    <div class="d-flex gap-3">
+      <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">Get Started</a>
+      <a href="{% url 'home' %}" class="btn btn-outline-light btn-lg">Learn More</a>
     </div>
+  </div>
 </section>
+
 
 <!-- Motivation Section -->
 <section class="py-5 bg-light text-dark text-center">
