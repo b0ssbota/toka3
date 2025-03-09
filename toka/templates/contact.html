@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: #ffffff;">
+<div class="d-flex align-items-center justify-content-center" style="min-height: 100vh; background-color: #f5f5f5;">
   <div class="container" style="max-width: 800px;">
     <div class="row">
       <!-- Contact Section -->
@@ -10,7 +10,7 @@
         <h2 class="text-center mb-3">Contact Us</h2>
         <p class="text-center">If you have any questions or need assistance, please get in touch using the form below.</p>
         <!-- Form Container with Border and Rounded Corners -->
-        <div class="p-4 border rounded mb-4">
+        <div class="p-4 border rounded mb-4" style="background-color: #FFFFFF;">
           <form action="{% url 'contact' %}" method="post">
             {% csrf_token %}
             <div class="mb-3">
@@ -44,7 +44,7 @@
               </button>
             </h2>
             <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
-              <div class="accordion-body" style="background-color: #F8F9FA; color: #000;">
+              <div class="accordion-body" style="background-color: #ffffff; color: #000;">
                 Our gym is open Monday to Friday from 6am to 10pm, and Saturday to Sunday from 8am to 8pm.
               </div>
             </div>
@@ -57,7 +57,7 @@
               </button>
             </h2>
             <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
-              <div class="accordion-body" style="background-color: #F8F9FA; color: #000;">
+              <div class="accordion-body" style="background-color: #ffffff; color: #000;">
                 You can sign up by clicking on the 'Join Us Today' button on our homepage and filling out the registration form.
               </div>
             </div>
@@ -70,7 +70,7 @@
               </button>
             </h2>
             <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
-              <div class="accordion-body" style="background-color: #F8F9FA; color: #000;">
+              <div class="accordion-body" style="background-color: #FFFFFF; color: #000;">
                 Refunds are handled on a case-by-case basis. Please contact our support team for more details.
               </div>
             </div>
