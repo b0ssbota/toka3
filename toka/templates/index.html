@@ -405,7 +405,7 @@
                 <button class="btn btn-secondary" disabled>Current Plan</button>
                 <form action="{% url 'membership_options' %}" method="post" class="mt-2">
                   {% csrf_token %}
-                  <button type="submit" name="cancel" class="btn btn-danger">Cancel Membership</button>
+                  <button type="submit" name="cancel" class="btn btn-warning">Cancel Membership</button>
                 </form>
               {% else %}
                 <form action="{% url 'membership_options' %}" method="post">
