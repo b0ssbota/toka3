@@ -10,13 +10,17 @@
     <h1 class="display-3 fw-bold">SHAPE YOUR BODY</h1>
     <h2 class="display-5 text-warning">BE STRONG</h2>
     <h3 class="mb-4">TRAINING HARD</h3>
-    <!-- Flex container for the buttons -->
     <div class="d-flex gap-3">
-      <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">Get Started</a>
-      <a href="{% url 'home' %}" class="btn btn-outline-light btn-lg">Learn More</a>
+      {% if user.is_authenticated %}
+         <a href="{% url 'home' %}#membership" class="btn btn-warning btn-lg">Get Started</a>
+      {% else %}
+         <a href="{% url 'signup' %}" class="btn btn-warning btn-lg">Get Started</a>
+      {% endif %}
+      <a href="{% url 'home' %}#why-choose-us" class="btn btn-outline-light btn-lg">Learn More</a>
     </div>
   </div>
 </section>
+
 
 
 <!-- Motivation Section -->
@@ -258,7 +262,7 @@
 
 <!-- Why Choose Us Section with Left Boxes and Right Image -->
 <!-- Why Choose Us Section with Bootstrap Icons -->
-<section class="py-5 bg-dark text-white">
+<section class="py-5 bg-dark text-white" id = "why-choose-us">
     <div class="container">
       <div class="row align-items-center">
         <!-- Left Column: Boxes with Bootstrap Icons -->
