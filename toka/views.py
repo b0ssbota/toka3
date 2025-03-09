@@ -1,10 +1,12 @@
 # views.py
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
-from .forms import LoginForm, SignupForm
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import LoginForm, SignupForm, ContactForm
 from .models import *
 
 def home(request):
@@ -276,7 +278,44 @@ def terms(request):
 def cookies(request):
     return render(request, 'cookies.html')
 
-
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Save form data to the database
+            submission = form.save()
+            
+            # Prepare the email content
+            subject = f'ShieldSenseAI: New Contact Submission from {submission.company}'
+            message = (
+                f"Name: {submission.name}\n"
+                f"Email: {submission.email}\n"
+                f"Company: {submission.company}\n"
+            )
+            recipient = settings.ADMIN_EMAIL  # Defined in settings.py
+            
+            # Send the email
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [recipient],
+                fail_silently=False,
+            )
+            
+            # If the request is AJAX, return a JSON response
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': 'Success, thanks!'})
+            else:
+                # Fallback: you could redirect or render the same template
+                return render(request, 'contact.html', {'form': ContactForm(), 'success': True})
+        else:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    else:
+        form = ContactForm()
+    
+    return render(request, 'contact.html', {'form': form})
 
 
 

@@ -84,3 +84,14 @@ class HealthPlanPurchase(models.Model):
 
     def __str__(self):
         return f"{self.user.username} purchased {self.health_plan.title}"
+    
+
+class ContactSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    company = models.CharField(max_length=200)
+    message = models.TextField(blank=True, null=True)  # Optional message field
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
