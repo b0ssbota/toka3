@@ -58,25 +58,34 @@
                   <a class="nav-link" href="{% url 'home' %}#workout-classes">Workout Classes</a>
                 </li>
               </ul>
-              <!-- Authentication Buttons -->
+              <!-- Authentication Buttons (Swapped) -->
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <!-- Become a Member first -->
+                <li class="nav-item">
+                  <a class="btn btn-warning me-2 btn-lg" href="{% url 'home' %}#membership" style="transition: background-color 0.3s ease;">
+                    Become a Member
+                  </a>
+                </li>
+                <!-- Then Sign Out or My Login -->
                 {% if user.is_authenticated %}
                   <li class="nav-item">
-                    <a class="btn btn-warning me-2 btn-lg" href="{% url 'logout' %}" style="transition: background-color 0.3s ease;">Sign Out</a>
+                    <a class="btn btn-warning btn-lg" href="{% url 'logout' %}" style="transition: background-color 0.3s ease;">
+                      Sign Out
+                    </a>
                   </li>
                 {% else %}
                   <li class="nav-item">
-                    <a class="btn btn-warning me-2 btn-lg" href="{% url 'login' %}" style="transition: background-color 0.3s ease;">My Login</a>
+                    <a class="btn btn-warning btn-lg" href="{% url 'login' %}" style="transition: background-color 0.3s ease;">
+                      My Login
+                    </a>
                   </li>
                 {% endif %}
-                <li class="nav-item">
-                  <a class="btn btn-warning btn-lg" href="{% url 'home' %}#membership" style="transition: background-color 0.3s ease;">Become a Member</a>
-                </li>
               </ul>
             </div>
           </div>
         </nav>    
       </header>
+      
       
       
 <!-- Main content grows to push footer down if page is short -->
