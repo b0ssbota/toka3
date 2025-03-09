@@ -89,8 +89,15 @@ def login_view(request):
 
 def workout_list(request):
     workouts = WorkoutClass.objects.all()
-    is_member = request.user.is_authenticated and request.user.groups.filter(name='Members').exists()  # Check membership
+    is_member = False
+    if request.user.is_authenticated:
+        membership, created = Membership.objects.get_or_create(
+            user=request.user,
+            defaults={'membership_type': 'free', 'price': 0.00}
+        )
+        is_member = (membership.membership_type != 'free')
     return render(request, 'workoutclass.html', {'workouts': workouts, 'is_member': is_member})
+
 
 def workout_detail(request, id):
     workout = get_object_or_404(WorkoutClass, id=id)

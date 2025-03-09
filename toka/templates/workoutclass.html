@@ -1,35 +1,64 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <section class="py-5 bg-white text-dark">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h2 class="fw-bold">Workout Classes</h2>
-                <p>Find the best workout classes tailored for you! Filter by difficulty and length to get started.</p>
-            </div>
-        </div>
-        <div class="row">
-            {% for workout in workouts %}
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-sm h-100">
-                    <img src="{{ workout.image.url }}" class="card-img-top" alt="{{ workout.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ workout.name }}</h5>
-                        <p>
-                            <strong>Difficulty:</strong> {{ workout.difficulty }}<br>
-                            <strong>Length:</strong> {{ workout.length }} minutes<br>
-                            <strong>Price:</strong> £{{ workout.price }}
-                        </p>
-                        {% if is_member or not workout.members_only %}
-                            <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">Start Class</a>
-                        {% else %}
-                            <button class="btn btn-secondary w-100" disabled>Members Only</button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col text-center">
+        <h2 class="fw-bold">Workout Classes</h2>
+        <p>Find the best workout classes tailored for you! Filter by difficulty and length to get started.</p>
+      </div>
     </div>
+    <div class="row">
+      {% for workout in workouts %}
+      <div class="col-md-3 mb-4">
+        <div class="card shadow-sm h-100">
+          <!-- Workout Image -->
+          <img 
+            src="{{ workout.image.url }}" 
+            class="card-img-top" 
+            alt="{{ workout.name }}"
+          >
+          <!-- Card Body -->
+          <div class="card-body text-start">
+            <h5 class="card-title fw-bold">{{ workout.name }}</h5>
+            <!-- Example: if you have a created_at field -->
+            <p class="text-muted mb-1">{{ workout.created_at|date:"F j, Y" }}</p>
+            <p class="mb-2">
+              {{ workout.description|truncatewords:15 }}
+            </p>
+            <p class="fw-bold mb-0">£{{ workout.price }}</p>
+          </div>
+          <!-- Card Footer: Members-Only Logic -->
+          <div class="card-footer bg-white border-0 text-center">
+            {% if workout.members_only %}
+              {% if user.is_authenticated %}
+                {% if is_member %}
+                  <!-- Logged in + member => can view -->
+                  <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">
+                    View Class
+                  </a>
+                {% else %}
+                  <!-- Logged in + not a member => members only -->
+                  <button class="btn btn-secondary w-100" disabled>Members Only</button>
+                {% endif %}
+              {% else %}
+                <!-- Not logged in => login button -->
+                <a href="{% url 'login' %}" class="btn btn-danger w-100">Login</a>
+              {% endif %}
+            {% else %}
+              <!-- Not members_only => open to all -->
+              <a href="{% url 'workout_detail' workout.id %}" class="btn btn-warning w-100">
+                View Class
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-center">No workout classes available at the moment.</p>
+      {% endfor %}
+    </div>
+  </div>
 </section>
 {% endblock content %}
