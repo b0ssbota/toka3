@@ -85,12 +85,11 @@
     {% endblock content %}
 </main>
 
-<!-- Footer (sticky at bottom) -->
 <footer class="bg-black py-4 mt-auto">
     <div class="container text-light">
       <div class="row">
-        <!-- Section 1: Company Links (unchanged) -->
-        <div class="col-md-4 mb-3">
+        <!-- Column 1: For Company -->
+        <div class="col-md-3 mb-3">
           <h5 class="text-uppercase">for company</h5>
           <ul class="list-unstyled">
             <li>
@@ -108,58 +107,58 @@
           </ul>
         </div>
   
-        <!-- Section 2: Log In / Sign Up or Sign Out -->
-        <div class="col-md-4 mb-3">
-            <h5 class="text-uppercase">
+        <!-- Column 2: Account -->
+        <div class="col-md-3 mb-3">
+          <h5 class="text-uppercase">Account</h5>
+          <ul class="list-unstyled">
             {% if user.is_authenticated %}
-                Account
-            {% else %}
-                Account
-            {% endif %}
-            </h5>
-            <ul class="list-unstyled">
-            {% if user.is_authenticated %}
-                <li>
+              <li>
                 <a class="text-light text-decoration-none" href="{% url 'logout' %}">Sign Out</a>
-                </li>
+              </li>
             {% else %}
-                <li>
+              <li>
                 <a class="text-light text-decoration-none" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li>
+              </li>
+              <li>
                 <a class="text-light text-decoration-none" href="{% url 'signup' %}">Sign Up</a>
-                </li>
+              </li>
             {% endif %}
-            </ul>
+          </ul>
         </div>
   
+        <!-- Column 3: Plans -->
+        <div class="col-md-3 mb-3">
+          <h5 class="text-uppercase">Plans</h5>
+          <ul class="list-unstyled">
+            <li>
+              <a class="text-light text-decoration-none" href="{% url 'workoutplan_list' %}">Workout Plans</a>
+            </li>
+            <li>
+              <a class="text-light text-decoration-none" href="{% url 'healthplan_list' %}">Health Plans</a>
+            </li>
+            <li>
+              <a class="text-light text-decoration-none" href="{% url 'workout_list' %}">Workout Classes</a>
+            </li>
+          </ul>
+        </div>
   
-        <div class="col-md-4 mb-3">
-            <h5 class="text-uppercase">Plans</h5>
-            <ul class="list-unstyled">
-              <li>
-                <a class="text-light text-decoration-none" href="{% url 'workoutplan_list' %}">Workout Plans</a>
-              </li>
-              <li>
-                <a class="text-light text-decoration-none" href="{% url 'healthplan_list' %}">Health Plans</a>
-              </li>
-              <li>
-                <a class="text-light text-decoration-none" href="{% url 'workout_list' %}">Workout Classes</a>
-              </li>
-            </ul>
-            <!-- Social Icons -->
-            <div class="d-flex gap-3 mt-3">
-              <a class="text-light fs-4" href="https://www.linkedin.com" target="_blank">
-                <i class="bi bi-linkedin"></i>
-              </a>
-              <a class="text-light fs-4" href="https://www.github.com" target="_blank">
-                <i class="bi bi-github"></i>
-              </a>
-            </div>
+        <!-- Column 4: Socials -->
+        <div class="col-md-3 mb-3">
+          <h5 class="text-uppercase">Socials</h5>
+          <div class="d-flex flex-column gap-3 mt-2">
+            <a class="text-light fs-4" href="https://www.linkedin.com" target="_blank">
+              <i class="bi bi-linkedin"></i>
+            </a>
+            <a class="text-light fs-4" href="https://github.com/b0ssbota" target="_blank">
+              <i class="bi bi-github"></i>
+            </a>
           </div>
         </div>
       </div>
+    </div>
   
+    <div class="container text-center mt-4">
+      <p class="text-muted mb-0">© 2024 Toka Fitness. All rights reserved.</p>
   </footer>
   
 
