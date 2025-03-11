@@ -314,12 +314,13 @@ def contact(request):
                 return JsonResponse({'success': False, 'errors': form.errors}, status=400)
     else:
         form = ContactForm()
+
     
     return render(request, 'contact.html', {'form': form})
 
 
 
-
+ 
 
 
 
