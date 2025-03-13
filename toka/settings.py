@@ -155,6 +155,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'claudinephoebe@gmail.com'
-EMAIL_HOST_PASSWORD = 'Meandpeter68#'
+EMAIL_HOST_PASSWORD = 'Meandpeter68'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMIN_EMAIL = 'claudinephoebe@gmail.com'
