@@ -294,12 +294,16 @@ def contact(request):
             )
             recipient = settings.ADMIN_EMAIL  # Defined in settings.py
             
+            print(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+
             # Send the email
             send_mail(
                 subject,
                 message,
                 settings.DEFAULT_FROM_EMAIL,
                 [recipient],
+                auth_user=settings.EMAIL_HOST_USER,
+                auth_password=settings.EMAIL_HOST_PASSWORD,
                 fail_silently=False,
             )
             

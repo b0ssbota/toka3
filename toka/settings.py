@@ -155,6 +155,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'harrytest140@gmail.com'
-EMAIL_HOST_PASSWORD = 'Meandpeter68'
+EMAIL_HOST_PASSWORD = 'mkxl twpx ptfw qwpm'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ADMIN_EMAIL = 'harrytest140@gmail.com'
