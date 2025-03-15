@@ -286,7 +286,7 @@ def contact(request):
             submission = form.save()
             
             # Prepare the email content
-            subject = f'ShieldSenseAI: New Contact Submission from {submission.company}'
+            subject = f'Toka Fitness: New Contact Submission from {submission.company}'
             message = (
                 f"Name: {submission.name}\n"
                 f"Email: {submission.email}\n"
