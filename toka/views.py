@@ -105,9 +105,6 @@ def workout_detail(request, id):
     workout = get_object_or_404(WorkoutClass, id=id)
     return render(request, "workoutclassindividual.html", {"workout": workout})
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Membership
 
 @login_required
 def membership_options(request):
