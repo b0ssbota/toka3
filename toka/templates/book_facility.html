@@ -49,7 +49,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <!-- Week Navigation (not yet functional, placeholders) -->
+        <!-- Week Navigation -->
         <button type="button" class="btn btn-outline-secondary" id="prevWeek">
           <i class="bi bi-chevron-left"></i>
         </button>
@@ -59,9 +59,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- Days of the Week Row: will be generated dynamically -->
+        <!-- Days of the Week Row -->
         <div class="d-flex justify-content-around mb-4" id="weekDays">
-          <!-- Buttons for days will appear here -->
+          <!-- Buttons for days will be generated here -->
         </div>
         <!-- Available Time Slots -->
         <div class="d-flex flex-wrap justify-content-center gap-3" id="timeSlots">
@@ -78,35 +78,37 @@
         </div>
       </div>
       <div class="modal-footer">
-        <!-- Confirm Booking Button -->
+        <!-- Button to confirm booking selection -->
         <button type="button" class="btn btn-primary" id="confirmBooking">Confirm Booking</button>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- JavaScript to capture selected date/time (basic example) -->
+<!-- JavaScript -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // Function to generate the current week's days
-    function generateWeekDays() {
+    // weekOffset: 0 = current week, -1 = previous week, 1 = next week, etc.
+    let weekOffset = 0;
+    
+    // Generate week days given the offset
+    function generateWeekDays(offset = 0) {
       const weekContainer = document.getElementById("weekDays");
-      weekContainer.innerHTML = ""; // Clear existing content
+      weekContainer.innerHTML = ""; // Clear previous content
 
       const today = new Date();
       // Calculate Monday of the current week
       const currentDay = today.getDay(); // 0 (Sun) ... 6 (Sat)
       const diffToMonday = (currentDay === 0 ? -6 : 1 - currentDay);
       const monday = new Date(today);
-      monday.setDate(today.getDate() + diffToMonday);
+      monday.setDate(today.getDate() + diffToMonday + (7 * offset));
 
-      // Generate buttons for 7 days starting from Monday
+      // Generate buttons for each day of the week
       for (let i = 0; i < 7; i++) {
         const day = new Date(monday);
         day.setDate(monday.getDate() + i);
 
-        // Format the day as "Mon 12" using toLocaleDateString options
+        // Format the day as "Mon 12"
         const options = { weekday: 'short' };
         const weekday = day.toLocaleDateString(undefined, options);
         const dateNum = day.getDate();
@@ -114,37 +116,60 @@
 
         const button = document.createElement("button");
         button.type = "button";
+        // Initially, use an outline style for unselected days
         button.className = "btn btn-outline-light";
         button.textContent = formatted;
 
-        // Disable the button if the day is in the past (compare without time)
+        // Disable if day is in the past for the current week (only if offset==0)
         const dayOnly = new Date(day.getFullYear(), day.getMonth(), day.getDate());
         const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        if (dayOnly < todayOnly) {
+        if (offset === 0 && dayOnly < todayOnly) {
           button.disabled = true;
           button.classList.add("disabled");
         }
 
-        // Add click event to mark selection
+        // Click event to select day
         button.addEventListener("click", function() {
-          // Remove 'active' class from all buttons
-          document.querySelectorAll("#weekDays button").forEach(btn => btn.classList.remove("active"));
-          // Mark the clicked button as active
+          // Remove active state from all day buttons
+          document.querySelectorAll("#weekDays button").forEach(btn => {
+            btn.classList.remove("active");
+            btn.classList.remove("btn-warning");
+            btn.classList.add("btn-outline-light");
+          });
+          // Mark the clicked button as active: swap style to filled button
           button.classList.add("active");
+          button.classList.remove("btn-outline-light");
+          button.classList.add("btn-warning");
         });
-
         weekContainer.appendChild(button);
       }
     }
-
-    generateWeekDays();
-
-    // Optionally, add click listeners for the time slot buttons (similar approach)
-    // For now, assume time slots are static
-
-    // When the user clicks the Confirm Booking button:
+    
+    // Initialize the week days
+    generateWeekDays(weekOffset);
+    
+    // Next and Previous week buttons
+    document.getElementById("prevWeek").addEventListener("click", function() {
+      weekOffset--;
+      generateWeekDays(weekOffset);
+    });
+    
+    document.getElementById("nextWeek").addEventListener("click", function() {
+      weekOffset++;
+      generateWeekDays(weekOffset);
+    });
+    
+    // Mark time slot buttons as active when clicked
+    document.querySelectorAll("#timeSlots button").forEach(button => {
+      button.addEventListener("click", function() {
+        document.querySelectorAll("#timeSlots button").forEach(btn => btn.classList.remove("active"));
+        // For time slots, you may want to change background on active selection
+        button.classList.add("active");
+      });
+    });
+    
+    // When the user clicks "Confirm Booking"
     document.getElementById("confirmBooking").addEventListener("click", function() {
-      // Check for selected day and time slot
       const selectedDayBtn = document.querySelector("#weekDays button.active");
       const selectedTimeBtn = document.querySelector("#timeSlots button.active");
       
@@ -153,26 +178,23 @@
         return;
       }
       
-      // For demonstration, we'll simply log the values.
-      // In production, you should assign these values to hidden form fields.
+      // Here you would parse selectedDayBtn.textContent into a proper date.
+      // For demonstration purposes, we log the values.
       console.log("Selected day:", selectedDayBtn.textContent);
       console.log("Selected time:", selectedTimeBtn.textContent);
       
-      // Close the modal after selection:
-      var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+      // Set hidden fields if necessary (not shown in this snippet)
+      // e.g., document.getElementById('id_date').value = computedDate;
+      // e.g., document.getElementById('id_time').value = selectedTimeBtn.textContent;
+      
+      // Close the modal using Bootstrap 5 modal methods
+      var bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
       bookingModal.hide();
       
-      // Optionally, auto-submit the form if desired:
+      // Optionally, submit the form automatically:
       // document.getElementById('bookingForm').submit();
-    });
-
-    // Mark time slot buttons as active when clicked
-    document.querySelectorAll("#timeSlots button").forEach(button => {
-      button.addEventListener("click", function() {
-        document.querySelectorAll("#timeSlots button").forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
-      });
     });
   });
 </script>
+
 {% endblock %}
