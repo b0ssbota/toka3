@@ -95,3 +95,43 @@ class ContactSubmission(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.email})"
+    
+
+
+
+
+
+class FacilityBooking(models.Model):
+    FACILITY_CHOICES = [
+        ('gym', 'Gym'),
+        ('pool', 'Pool'),
+    ]
+
+    LOCATION_CHOICES = [
+        ('north', 'North Branch'),
+        ('south', 'South Branch'),
+        ('east', 'East Branch'),
+        ('west', 'West Branch'),
+    ]
+
+    name = models.CharField(max_length=100, help_text="Your full name")
+    facility_type = models.CharField(
+        max_length=10, 
+        choices=FACILITY_CHOICES, 
+        help_text="Which facility do you want to use?"
+    )
+    location = models.CharField(
+        max_length=10, 
+        choices=LOCATION_CHOICES, 
+        help_text="Which branch location?"
+    )
+    date = models.DateField(help_text="Select the date of your visit")
+    time = models.TimeField(help_text="Select the time of your visit (9AM–5PM)")
+    additional_info = models.TextField(
+        blank=True, 
+        help_text="Any additional details or requests (optional)."
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.facility_type} at {self.location} on {self.date} {self.time}"

@@ -43,6 +43,7 @@ urlpatterns = [
     path('privacy/', privacy, name='privacy'),
     path('terms/', terms, name='terms'),
     path('cookies/', cookies, name='cookies'),
+    path('book/', book_facility, name='book_facility'),
     # ... other URL patterns ...
 
 ]

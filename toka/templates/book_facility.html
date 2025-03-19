@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 600px;">
+  <h2 class="text-center mb-4">Book a Facility</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="mb-3">
+      <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+      {{ form.name }}
+      {% if form.name.errors %}
+        <div class="text-danger">{{ form.name.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.facility_type.id_for_label }}" class="form-label">Facility Type</label>
+      {{ form.facility_type }}
+      {% if form.facility_type.errors %}
+        <div class="text-danger">{{ form.facility_type.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+      {{ form.location }}
+      {% if form.location.errors %}
+        <div class="text-danger">{{ form.location.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
+      {{ form.date }}
+      {% if form.date.errors %}
+        <div class="text-danger">{{ form.date.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.time.id_for_label }}" class="form-label">Time</label>
+      {{ form.time }}
+      {% if form.time.errors %}
+        <div class="text-danger">{{ form.time.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="{{ form.additional_info.id_for_label }}" class="form-label">Additional Info</label>
+      {{ form.additional_info }}
+      {% if form.additional_info.errors %}
+        <div class="text-danger">{{ form.additional_info.errors }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-warning w-100">Book Now</button>
+  </form>
+</div>
+{% endblock %}
