@@ -3,60 +3,137 @@
 
 {% block content %}
 <div class="container my-5" style="max-width: 600px;">
-  <h2 class="text-center mb-4">Book a Facility</h2>
-  <form method="POST">
+  <h2 class="text-center mb-4">Book Your Session</h2>
+  <form id="bookingForm" method="post" action="{% url 'book_facility' %}">
     {% csrf_token %}
-    {{ form.non_field_errors }}
-
+    <!-- Basic fields (without date and time) -->
     <div class="mb-3">
-      <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
-      {{ form.name }}
-      {% if form.name.errors %}
-        <div class="text-danger">{{ form.name.errors }}</div>
-      {% endif %}
+      <label for="id_name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="id_name" name="name" placeholder="Your Name" required>
     </div>
-
     <div class="mb-3">
-      <label for="{{ form.facility_type.id_for_label }}" class="form-label">Facility Type</label>
-      {{ form.facility_type }}
-      {% if form.facility_type.errors %}
-        <div class="text-danger">{{ form.facility_type.errors }}</div>
-      {% endif %}
+      <label for="id_facility_type" class="form-label">Facility Type</label>
+      <select class="form-select" id="id_facility_type" name="facility_type" required>
+        <option value="">Select a facility</option>
+        <option value="gym">Gym</option>
+        <option value="pool">Pool</option>
+      </select>
     </div>
-
     <div class="mb-3">
-      <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
-      {{ form.location }}
-      {% if form.location.errors %}
-        <div class="text-danger">{{ form.location.errors }}</div>
-      {% endif %}
+      <label for="id_location" class="form-label">Location</label>
+      <select class="form-select" id="id_location" name="location" required>
+        <option value="">Select a location</option>
+        <option value="north">North Branch</option>
+        <option value="south">South Branch</option>
+        <option value="east">East Branch</option>
+        <option value="west">West Branch</option>
+      </select>
     </div>
-
     <div class="mb-3">
-      <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
-      {{ form.date }}
-      {% if form.date.errors %}
-        <div class="text-danger">{{ form.date.errors }}</div>
-      {% endif %}
+      <label for="id_additional_info" class="form-label">Additional Info</label>
+      <textarea class="form-control" id="id_additional_info" name="additional_info" rows="3" placeholder="Any additional details (optional)"></textarea>
     </div>
-
-    <div class="mb-3">
-      <label for="{{ form.time.id_for_label }}" class="form-label">Time</label>
-      {{ form.time }}
-      {% if form.time.errors %}
-        <div class="text-danger">{{ form.time.errors }}</div>
-      {% endif %}
-    </div>
-
-    <div class="mb-3">
-      <label for="{{ form.additional_info.id_for_label }}" class="form-label">Additional Info</label>
-      {{ form.additional_info }}
-      {% if form.additional_info.errors %}
-        <div class="text-danger">{{ form.additional_info.errors }}</div>
-      {% endif %}
-    </div>
-
-    <button type="submit" class="btn btn-warning w-100">Book Now</button>
+    <!-- Hidden fields for date and time (to be filled by the modal) -->
+    <input type="hidden" id="id_date" name="date">
+    <input type="hidden" id="id_time" name="time">
+    
+    <!-- Button triggers the Date/Time Modal -->
+    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
+      Next: Select Date & Time
+    </button>
   </form>
 </div>
+
+<!-- Booking Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- Week Navigation -->
+        <button type="button" class="btn btn-outline-secondary" id="prevWeek">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <h5 class="modal-title text-center flex-grow-1" id="bookingModalLabel">Select a Date</h5>
+        <button type="button" class="btn btn-outline-secondary" id="nextWeek">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Days of the Week Row -->
+        <div class="d-flex justify-content-around mb-4" id="weekDays">
+          <!-- Static example for one week -->
+          <button type="button" class="btn btn-outline-light">Mon 12</button>
+          <button type="button" class="btn btn-outline-light">Tue 13</button>
+          <button type="button" class="btn btn-outline-light">Wed 14</button>
+          <button type="button" class="btn btn-outline-light">Thu 15</button>
+          <button type="button" class="btn btn-outline-light">Fri 16</button>
+          <button type="button" class="btn btn-outline-light">Sat 17</button>
+          <button type="button" class="btn btn-outline-light">Sun 18</button>
+        </div>
+        <!-- Available Time Slots -->
+        <div class="d-flex flex-wrap justify-content-center gap-3" id="timeSlots">
+          <button type="button" class="btn btn-warning">09:00</button>
+          <button type="button" class="btn btn-warning">10:00</button>
+          <button type="button" class="btn btn-warning">11:00</button>
+          <button type="button" class="btn btn-warning">12:00</button>
+          <button type="button" class="btn btn-warning">13:00</button>
+          <button type="button" class="btn btn-warning">14:00</button>
+          <button type="button" class="btn btn-warning">15:00</button>
+          <button type="button" class="btn btn-warning">16:00</button>
+          <button type="button" class="btn btn-warning">17:00</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="confirmBooking">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript to capture selected date/time (basic example) -->
+<script>
+  // Example using vanilla JavaScript
+  document.addEventListener('DOMContentLoaded', function() {
+    let selectedDay = null;
+    let selectedTime = null;
+
+    // Mark selected day
+    document.querySelectorAll('#weekDays button').forEach(button => {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('#weekDays button').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        selectedDay = this.textContent.trim();
+      });
+    });
+
+    // Mark selected time
+    document.querySelectorAll('#timeSlots button').forEach(button => {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('#timeSlots button').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        selectedTime = this.textContent.trim();
+      });
+    });
+
+    // When user confirms booking
+    document.getElementById('confirmBooking').addEventListener('click', function() {
+      if (!selectedDay || !selectedTime) {
+        alert("Please select both a day and a time slot.");
+        return;
+      }
+      // Here, parse selectedDay into a proper date format if needed.
+      // For example, if selectedDay is "Mon 12", you might need to compute the actual date.
+      // For this example, we'll simply assign a dummy value.
+      document.getElementById('id_date').value = "2023-12-12"; // replace with real date
+      document.getElementById('id_time').value = selectedTime;  // e.g., "09:00"
+
+      // Close modal (requires Bootstrap 5's modal methods)
+      var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+      bookingModal.hide();
+
+      // Optionally, submit the form automatically
+      // document.getElementById('bookingForm').submit();
+    });
+  });
+</script>
 {% endblock %}

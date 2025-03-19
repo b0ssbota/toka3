@@ -322,19 +322,19 @@ def contact(request):
 
 
 
-
+@login_required
 def book_facility(request):
     if request.method == 'POST':
         form = FacilityBookingForm(request.POST)
         if form.is_valid():
-            booking = form.save()
-            # Optionally redirect to a success page or show a message
-            return redirect('booking_success')  # Make sure you have this URL defined
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.save()
+            return redirect('booking_success')  # Ensure you have a URL for booking_success
     else:
         form = FacilityBookingForm()
 
     return render(request, 'book_facility.html', {'form': form})
-
  
 
 
