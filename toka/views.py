@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import *
 from .models import *
+from django.contrib import messages
 
 def home(request):
     # Query top 4 items
@@ -330,10 +331,10 @@ def book_facility(request):
             booking = form.save(commit=False)
             booking.user = request.user
             booking.save()
-            return redirect('booking_success')  # Ensure you have a URL for booking_success
+            messages.success(request, "Booking submitted!")
+            return redirect('dashboard')  # Redirect to dashboard or success page
     else:
         form = FacilityBookingForm()
-
     return render(request, 'book_facility.html', {'form': form})
  
 

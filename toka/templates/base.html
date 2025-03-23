@@ -66,6 +66,9 @@
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'book_facility' %}">Book Facility</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                  </li>
                 {% endif %}
               </ul>
 
@@ -97,8 +100,19 @@
         </nav>    
       </header>
       
+        <!-- Message Display Block -->
+      {% if messages %}
+      <div class="container mt-3">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
       
-      
+        <!-- Message Display Block -->
 <!-- Main content grows to push footer down if page is short -->
 <main class="flex-grow-1">
     {% block content %}
