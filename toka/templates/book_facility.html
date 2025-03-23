@@ -60,21 +60,21 @@
       </div>
       <div class="modal-body">
         <!-- Days of the Week Row -->
-        <div class="d-flex justify-content-around mb-4" id="weekDays" text="black">
+        <div class="d-flex justify-content-around mb-4" id="weekDays">
           <!-- Day buttons will be generated dynamically -->
         </div>
         <!-- Available Time Slots -->
         <div class="d-flex flex-wrap justify-content-center gap-3" id="timeSlots">
           <!-- Time slot buttons (9AM to 5PM) with shadows -->
-          <button type="button" class="btn btn-warning shadow">09:00</button>
-          <button type="button" class="btn btn-warning shadow">10:00</button>
-          <button type="button" class="btn btn-warning shadow">11:00</button>
-          <button type="button" class="btn btn-warning shadow">12:00</button>
-          <button type="button" class="btn btn-warning shadow">13:00</button>
-          <button type="button" class="btn btn-warning shadow">14:00</button>
-          <button type="button" class="btn btn-warning shadow">15:00</button>
-          <button type="button" class="btn btn-warning shadow">16:00</button>
-          <button type="button" class="btn btn-warning shadow">17:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">09:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">10:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">11:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">12:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">13:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">14:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">15:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">16:00</button>
+          <button type="button" class="btn btn-warning shadow text-dark">17:00</button>
         </div>
       </div>
       <div class="modal-footer">
@@ -114,8 +114,8 @@
 
         const button = document.createElement("button");
         button.type = "button";
-        // Use Bootstrap outline light with a shadow for unselected days
-        button.className = "btn btn-outline-light shadow";
+        // Initial styling: outline light with shadow and black text
+        button.className = "btn btn-outline-light shadow text-dark";
         button.textContent = formatted;
 
         // Disable if day is in the past (only for current week)
@@ -128,15 +128,16 @@
 
         // Add click event to select day
         button.addEventListener("click", function() {
+          // Remove active state from all day buttons
           document.querySelectorAll("#weekDays button").forEach(btn => {
             btn.classList.remove("active");
             btn.classList.remove("btn-warning");
-            btn.classList.add("btn-outline-light");
+            btn.classList.add("btn-outline-light", "text-dark");
           });
-          // Mark the clicked button as active (filled style)
+          // Mark the clicked button as active: filled yellow background, black text
           button.classList.add("active");
-          button.classList.remove("btn-outline-light");
-          button.classList.add("btn-warning");
+          button.classList.remove("btn-outline-light", "text-dark");
+          button.classList.add("btn-warning", "text-dark");
         });
 
         weekContainer.appendChild(button);
@@ -182,17 +183,20 @@
       console.log("Selected day:", selectedDayBtn.textContent);
       console.log("Selected time:", selectedTimeBtn.textContent);
       
-      // Here, convert selectedDayBtn.textContent to a date if needed, then set hidden form fields
+      // Set hidden fields if needed (example with dummy date)
+      document.getElementById('id_date').value = "2023-12-12"; // Replace with actual computed date
+      document.getElementById('id_time').value = selectedTimeBtn.textContent;
       
-      // Close the modal
+      // Close the modal using Bootstrap 5 modal methods
       var bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
       bookingModal.hide();
       
-      // Optionally, submit the form
+      // Optionally, submit the form automatically:
       // document.getElementById('bookingForm').submit();
     });
   });
 </script>
+
 
 
 {% endblock %}
