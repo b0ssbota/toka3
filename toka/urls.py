@@ -44,6 +44,7 @@ urlpatterns = [
     path('terms/', terms, name='terms'),
     path('cookies/', cookies, name='cookies'),
     path('book/', book_facility, name='book_facility'),
+    path('dashboard/', dashboard, name='dashboard'),
     # ... other URL patterns ...
 
 ]

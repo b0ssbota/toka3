@@ -337,8 +337,11 @@ def book_facility(request):
     return render(request, 'book_facility.html', {'form': form})
  
 
-
-
+@login_required
+def dashboard(request):
+    # Get bookings for the current user, ordered by date and time
+    bookings = FacilityBooking.objects.filter(user=request.user).order_by('-date', '-time')
+    return render(request, 'dashboard.html', {'bookings': bookings})
 
 
 
