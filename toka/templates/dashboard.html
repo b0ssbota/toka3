@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
-
 {% block content %}
 <section class="py-5">
   <div class="container">
@@ -25,7 +23,7 @@
               <td>{{ booking.get_facility_type_display }}</td>
               <td>{{ booking.get_location_display }}</td>
               <td>{{ booking.additional_info|default:"N/A" }}</td>
-            </tr>ss
+            </tr>
             {% endfor %}
           </tbody>
         </table>
