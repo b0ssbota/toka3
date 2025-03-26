@@ -3,52 +3,104 @@
 
 {% block content %}
 <div class="container my-5" style="max-width: 600px;">
-  <h2 class="text-center mb-4">Book Your Session</h2>
-  <form id="bookingForm" method="post" action="{% url 'book_facility' %}">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-
-    <!-- Basic fields (excluding date/time) -->
-    <div class="mb-3">
-      <label for="id_name" class="form-label">Name</label>
-      {{ form.name }}
-    </div>
-    <div class="mb-3">
-      <label for="id_facility_type" class="form-label">Facility Type</label>
-      {{ form.facility_type }}
-    </div>
-    <div class="mb-3">
-      <label for="id_location" class="form-label">Location</label>
-      {{ form.location }}
-    </div>
-    <div class="mb-3">
-      <label for="id_additional_info" class="form-label">Additional Info</label>
-      {{ form.additional_info }}
-    </div>
+  <!-- Card Wrapper for a cleaner look -->
+  <div class="card shadow p-4" style="border-radius: 10px; background-color: #fff;">
+    <h2 class="text-center mb-4">Book Your Session</h2>
     
-    <!-- Hidden fields for date/time set by the modal -->
-    <input type="hidden" id="id_date" name="date">
-    <input type="hidden" id="id_time" name="time">
+    <form id="bookingForm" method="post" action="{% url 'book_facility' %}">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      
+      <!-- Name Field -->
+      <div class="mb-3">
+        <label for="id_name" class="form-label fw-bold">Name</label>
+        <input 
+          type="text"
+          name="name"
+          id="id_name"
+          class="form-control form-control-lg"
+          placeholder="Enter your name"
+          required
+        >
+      </div>
 
-    <!-- Button to trigger the Date/Time Modal -->
-    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
-      Next: Select Date & Time
-    </button>
-  </form>
+      <!-- Facility Type Field -->
+      <div class="mb-3">
+        <label for="id_facility_type" class="form-label fw-bold">Facility Type</label>
+        <select 
+          name="facility_type"
+          id="id_facility_type"
+          class="form-select form-select-lg"
+          required
+        >
+          <option value="">Select a facility</option>
+          <option value="gym">Gym</option>
+          <option value="pool">Pool</option>
+        </select>
+      </div>
+
+      <!-- Location Field -->
+      <div class="mb-3">
+        <label for="id_location" class="form-label fw-bold">Location</label>
+        <select 
+          name="location"
+          id="id_location"
+          class="form-select form-select-lg"
+          required
+        >
+          <option value="">Select a location</option>
+          <option value="north">North Branch</option>
+          <option value="south">South Branch</option>
+          <option value="east">East Branch</option>
+          <option value="west">West Branch</option>
+        </select>
+      </div>
+
+      <!-- Additional Info Field -->
+      <div class="mb-3">
+        <label for="id_additional_info" class="form-label fw-bold">Additional Info</label>
+        <textarea
+          name="additional_info"
+          id="id_additional_info"
+          rows="3"
+          class="form-control form-control-lg"
+          placeholder="Any additional details (optional)"
+        ></textarea>
+      </div>
+
+      <!-- Hidden fields for date/time set by the modal -->
+      <input type="hidden" id="id_date" name="date">
+      <input type="hidden" id="id_time" name="time">
+
+      <!-- Button to trigger the Date/Time Modal -->
+      <button 
+        type="button"
+        class="btn btn-warning w-100 rounded-pill py-2"
+        data-bs-toggle="modal"
+        data-bs-target="#bookingModal"
+      >
+        Next: Select Date & Time
+      </button>
+    </form>
+  </div>
 </div>
 
 <!-- Booking Modal -->
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content shadow">
-      <div class="modal-header">
+    <div class="modal-content shadow-lg rounded-3">
+      <div class="modal-header bg-dark text-light">
         <!-- Week Navigation using links -->
-        <a href="?week_offset={{ week_offset|add:"-1" }}" class="btn btn-outline-secondary {% if week_offset == 0 %}disabled{% endif %}" 
-           id="prevWeek" aria-disabled="{% if week_offset == 0 %}true{% endif %}">
+        <a 
+          href="?week_offset={{ week_offset|add:"-1" }}"
+          class="btn btn-outline-light {% if week_offset == 0 %}disabled{% endif %}"
+          id="prevWeek"
+          aria-disabled="{% if week_offset == 0 %}true{% endif %}"
+        >
           <i class="bi bi-chevron-left"></i>
         </a>
         <h5 class="modal-title text-center flex-grow-1" id="bookingModalLabel">Select a Date</h5>
-        <a href="?week_offset={{ week_offset|add:"1" }}" class="btn btn-outline-secondary" id="nextWeek">
+        <a href="?week_offset={{ week_offset|add:"1" }}" class="btn btn-outline-light" id="nextWeek">
           <i class="bi bi-chevron-right"></i>
         </a>
       </div>
@@ -56,8 +108,12 @@
         <!-- Days of the Week Row (server-side generation) -->
         <div class="d-flex justify-content-around mb-4" id="weekDays">
           {% for day in week_days %}
-            <button type="button" class="btn {% if day.disabled %}btn-secondary disabled{% else %}btn-outline-light text-dark{% endif %} shadow" 
-                    data-date="{{ day.date|date:"Y-m-d" }}">
+            <button 
+              type="button"
+              class="btn {% if day.disabled %}btn-secondary disabled{% else %}btn-outline-light text-dark{% endif %} shadow"
+              style="min-width: 80px;"
+              data-date="{{ day.date|date:"Y-m-d" }}"
+            >
               {{ day.formatted }}
             </button>
           {% endfor %}
@@ -65,15 +121,20 @@
         <!-- Time Slots (server-side from time_slots list) -->
         <div class="d-flex flex-wrap justify-content-center gap-3" id="timeSlots">
           {% for slot in time_slots %}
-            <button type="button" class="btn btn-warning shadow text-dark" data-time="{{ slot }}">
+            <button 
+              type="button"
+              class="btn btn-outline-warning shadow text-dark"
+              style="min-width: 80px;"
+              data-time="{{ slot }}"
+            >
               {{ slot }}
             </button>
           {% endfor %}
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer bg-dark">
         <!-- Confirm Booking Button (submits the form after setting hidden fields) -->
-        <button type="button" class="btn btn-primary" id="confirmBooking">Confirm Booking</button>
+        <button type="button" class="btn btn-primary w-100" id="confirmBooking">Confirm Booking</button>
       </div>
     </div>
   </div>
@@ -88,13 +149,10 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll("#weekDays button").forEach(button => {
     if (!button.classList.contains("disabled")) {
       button.addEventListener("click", function() {
-        // Clear existing active states
         document.querySelectorAll("#weekDays button").forEach(btn => {
-          btn.classList.remove("btn-warning");
-          btn.classList.remove("active");
+          btn.classList.remove("btn-warning", "active");
           btn.classList.add("btn-outline-light", "text-dark");
         });
-        // Mark this button as active
         this.classList.add("active", "btn-warning");
         this.classList.remove("btn-outline-light", "text-dark");
         selectedDayBtn = this;
@@ -117,9 +175,9 @@ document.addEventListener("DOMContentLoaded", function() {
       alert("Please select both a day and a time slot.");
       return;
     }
-    // Get data attributes
-    const selectedDate = selectedDayBtn.getAttribute("data-date"); 
-    const selectedTime = selectedTimeBtn.getAttribute("data-time"); 
+    // Retrieve data attributes
+    const selectedDate = selectedDayBtn.getAttribute("data-date");
+    const selectedTime = selectedTimeBtn.getAttribute("data-time");
 
     // Set hidden fields
     document.getElementById("id_date").value = selectedDate;
