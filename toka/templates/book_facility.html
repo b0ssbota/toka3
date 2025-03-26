@@ -6,7 +6,7 @@
   <h2 class="text-center mb-4">Book Your Session</h2>
   <form id="bookingForm" method="post" action="{% url 'book_facility' %}">
     {% csrf_token %}
-    <!-- Basic fields (without date and time) -->
+    <!-- Basic fields -->
     <div class="mb-3">
       <label for="id_name" class="form-label">Name</label>
       <input type="text" class="form-control" id="id_name" name="name" placeholder="Your Name" required>
@@ -33,10 +33,9 @@
       <label for="id_additional_info" class="form-label">Additional Info</label>
       <textarea class="form-control" id="id_additional_info" name="additional_info" rows="3" placeholder="Any additional details (optional)"></textarea>
     </div>
-    <!-- Hidden fields for date and time (to be filled by the modal) -->
+    <!-- Hidden fields for date and time -->
     <input type="hidden" id="id_date" name="date">
     <input type="hidden" id="id_time" name="time">
-    
     <!-- Button triggers the Date/Time Modal -->
     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
       Next: Select Date & Time
@@ -49,156 +48,42 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content shadow">
       <div class="modal-header">
-        <!-- Week Navigation -->
-        <button type="button" class="btn btn-outline-secondary" id="prevWeek">
+        <!-- Week Navigation using Django links -->
+        <a href="{% url 'book_facility' %}?week_offset={{ week_offset|add:"-1" }}" class="btn btn-outline-secondary">
           <i class="bi bi-chevron-left"></i>
-        </button>
+        </a>
         <h5 class="modal-title text-center flex-grow-1" id="bookingModalLabel">Select a Date</h5>
-        <button type="button" class="btn btn-outline-secondary" id="nextWeek">
+        <a href="{% url 'book_facility' %}?week_offset={{ week_offset|add:"1" }}" class="btn btn-outline-secondary">
           <i class="bi bi-chevron-right"></i>
-        </button>
+        </a>
       </div>
       <div class="modal-body">
         <!-- Days of the Week Row -->
-        <div class="d-flex justify-content-around mb-4" id="weekDays">
-          <!-- Day buttons will be generated dynamically -->
+        <div class="d-flex justify-content-around mb-4">
+          {% for day in week_days %}
+            <button type="button" class="btn {% if day.disabled %}btn-secondary disabled{% else %}btn-outline-light{% endif %} shadow text-dark" 
+                    name="selected_day" value="{{ day.date }}">
+              {{ day.formatted }}
+            </button>
+          {% endfor %}
         </div>
-        <!-- Available Time Slots -->
-        <div class="d-flex flex-wrap justify-content-center gap-3" id="timeSlots">
-          <!-- Time slot buttons (9AM to 5PM) with shadows -->
-          <button type="button" class="btn btn-warning shadow text-dark">09:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">10:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">11:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">12:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">13:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">14:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">15:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">16:00</button>
-          <button type="button" class="btn btn-warning shadow text-dark">17:00</button>
+        <!-- Available Time Slots (using radio buttons) -->
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          {% for hour in "09 10 11 12 13 14 15 16 17".split %}
+            <label class="btn btn-warning shadow text-dark">
+              <input type="radio" name="time_slot" value="{{ hour }}:00" autocomplete="off"> {{ hour }}:00
+            </label>
+          {% endfor %}
         </div>
       </div>
       <div class="modal-footer">
-        <!-- Confirm Booking Button -->
-        <button type="button" class="btn btn-primary" id="confirmBooking">Confirm Booking</button>
+        <!-- Confirm Booking Button: When clicked, the form is submitted -->
+        <button type="submit" form="bookingForm" class="btn btn-primary">Confirm Booking</button>
       </div>
     </div>
   </div>
 </div>
-
-
-<
-<!-- JavaScript -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    let weekOffset = 0; // 0 represents the current week
-
-    // Function to generate the current week's day buttons
-    function generateWeekDays(offset = 0) {
-      const weekContainer = document.getElementById("weekDays");
-      weekContainer.innerHTML = ""; // Clear previous content
-
-      const today = new Date();
-      // Calculate Monday of the current week
-      const currentDay = today.getDay(); // 0 (Sun) ... 6 (Sat)
-      const diffToMonday = (currentDay === 0 ? -6 : 1 - currentDay);
-      const monday = new Date(today);
-      monday.setDate(today.getDate() + diffToMonday + (7 * offset));
-
-      for (let i = 0; i < 7; i++) {
-        const day = new Date(monday);
-        day.setDate(monday.getDate() + i);
-
-        // Format the day as "Mon 12"
-        const options = { weekday: 'short' };
-        const weekday = day.toLocaleDateString(undefined, options);
-        const dateNum = day.getDate();
-        const formatted = `${weekday} ${dateNum}`;
-
-        const button = document.createElement("button");
-        button.type = "button";
-        // Initial styling: outline light with shadow and black text
-        button.className = "btn btn-outline-light shadow text-dark";
-        button.textContent = formatted;
-
-        // Disable if day is in the past (only for current week)
-        const dayOnly = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-        const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        if (offset === 0 && dayOnly < todayOnly) {
-          button.disabled = true;
-          button.classList.add("disabled");
-        }
-
-        // Add click event to select day
-        button.addEventListener("click", function() {
-          // Remove active state from all day buttons
-          document.querySelectorAll("#weekDays button").forEach(btn => {
-            btn.classList.remove("active");
-            btn.classList.remove("btn-warning");
-            btn.classList.add("btn-outline-light", "text-dark");
-          });
-          // Mark the clicked button as active: filled yellow background, black text
-          button.classList.add("active");
-          button.classList.remove("btn-outline-light", "text-dark");
-          button.classList.add("btn-warning", "text-dark");
-        });
-
-        weekContainer.appendChild(button);
-      }
-    }
-
-    // Initialize week days
-    generateWeekDays(weekOffset);
-
-    // Next and Previous week navigation
-    document.getElementById("prevWeek").addEventListener("click", function() {
-      // Prevent going to past weeks (offset less than 0)
-      if (weekOffset === 0) {
-        return;
-      }
-      weekOffset--;
-      generateWeekDays(weekOffset);
-    });
-
-    document.getElementById("nextWeek").addEventListener("click", function() {
-      weekOffset++;
-      generateWeekDays(weekOffset);
-    });
-
-    // Time Slot Buttons Active State
-    document.querySelectorAll("#timeSlots button").forEach(button => {
-      button.addEventListener("click", function() {
-        document.querySelectorAll("#timeSlots button").forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
-      });
-    });
-
-    // Confirm Booking Button functionality
-    document.getElementById("confirmBooking").addEventListener("click", function() {
-      const selectedDayBtn = document.querySelector("#weekDays button.active");
-      const selectedTimeBtn = document.querySelector("#timeSlots button.active");
-      
-      if (!selectedDayBtn || !selectedTimeBtn) {
-        alert("Please select both a day and a time slot.");
-        return;
-      }
-      
-      console.log("Selected day:", selectedDayBtn.textContent);
-      console.log("Selected time:", selectedTimeBtn.textContent);
-      
-      // Set hidden fields if needed (example with dummy date)
-      document.getElementById('id_date').value = "2023-12-12"; // Replace with actual computed date
-      document.getElementById('id_time').value = selectedTimeBtn.textContent;
-      
-      // Close the modal using Bootstrap 5 modal methods
-      var bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
-      bookingModal.hide();
-      
-      // Optionally, submit the form automatically:
-      // document.getElementById('bookingForm').submit();
-    });
-  });
-</script>
-
+{% endblock %}
 
 
 {% endblock %}

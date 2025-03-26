@@ -325,6 +325,30 @@ def contact(request):
 
 @login_required
 def book_facility(request):
+    # Get the week offset from the query string (default 0 = current week)
+    try:
+        week_offset = int(request.GET.get('week_offset', 0))
+    except ValueError:
+        week_offset = 0
+
+    today = datetime.date.today()
+    # Compute Monday of the current week (Monday = 0)
+    monday = today - datetime.timedelta(days=today.weekday())
+    # Apply offset (each offset represents one week)
+    monday += datetime.timedelta(weeks=week_offset)
+    
+    # Generate the week days
+    week_days = []
+    for i in range(7):
+        day = monday + datetime.timedelta(days=i)
+        disabled = (week_offset == 0 and day < today)  # disable days before today for current week
+        week_days.append({
+            'date': day,
+            'formatted': day.strftime("%a %d"),  # e.g., "Mon 12"
+            'disabled': disabled,
+        })
+    
+    # Process the booking form
     if request.method == 'POST':
         form = FacilityBookingForm(request.POST)
         if form.is_valid():
@@ -332,11 +356,16 @@ def book_facility(request):
             booking.user = request.user
             booking.save()
             messages.success(request, "Booking submitted!")
-            return redirect('dashboard')  # Redirect to dashboard or success page
+            return redirect('dashboard')
     else:
         form = FacilityBookingForm()
-    return render(request, 'book_facility.html', {'form': form})
- 
+    
+    context = {
+        'form': form,
+        'week_days': week_days,
+        'week_offset': week_offset,
+    }
+    return render(request, 'book_facility.html', context)
 
 @login_required
 def dashboard(request):
