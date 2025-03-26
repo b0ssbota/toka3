@@ -325,47 +325,74 @@ def contact(request):
 
 @login_required
 def book_facility(request):
-    # Get the week offset from the query string (default 0 = current week)
+    # 1) Determine which week to display
     try:
         week_offset = int(request.GET.get('week_offset', 0))
     except ValueError:
         week_offset = 0
 
     today = datetime.date.today()
-    # Compute Monday of the current week (Monday = 0)
+    # Monday of the current week
     monday = today - datetime.timedelta(days=today.weekday())
-    # Apply offset (each offset represents one week)
+    # Apply offset
     monday += datetime.timedelta(weeks=week_offset)
-    
-    # Generate the week days
+
+    # Generate days for this week
     week_days = []
     for i in range(7):
         day = monday + datetime.timedelta(days=i)
-        disabled = (week_offset == 0 and day < today)  # disable days before today for current week
+        formatted = day.strftime("%a %d")  # e.g., "Mon 12"
+        # Disable if day is in the past for the current week_offset=0
+        disabled = (week_offset == 0 and day < today)
         week_days.append({
             'date': day,
-            'formatted': day.strftime("%a %d"),  # e.g., "Mon 12"
+            'formatted': formatted,
             'disabled': disabled,
         })
-    
-    # Process the booking form
+
+    # 2) Create a list of time slots (9:00 to 17:00)
+    time_slots = [
+        "09:00", "10:00", "11:00", "12:00", 
+        "13:00", "14:00", "15:00", "16:00", "17:00"
+    ]
+
+    # 3) Handle the booking form
     if request.method == 'POST':
         form = FacilityBookingForm(request.POST)
         if form.is_valid():
             booking = form.save(commit=False)
             booking.user = request.user
+
+            # Retrieve date/time from hidden fields in the form
+            # or from request.POST if using direct inputs
+            str_date = request.POST.get('date')
+            str_time = request.POST.get('time')
+            if not str_date or not str_time:
+                messages.error(request, "No date/time selected.")
+                return redirect('book_facility')
+
+            # Convert date/time strings to Python objects
+            try:
+                booking.date = datetime.datetime.strptime(str_date, "%Y-%m-%d").date()
+                booking.time = datetime.datetime.strptime(str_time, "%H:%M").time()
+            except ValueError:
+                messages.error(request, "Invalid date/time format.")
+                return redirect('book_facility')
+
             booking.save()
             messages.success(request, "Booking submitted!")
             return redirect('dashboard')
     else:
         form = FacilityBookingForm()
-    
+
     context = {
         'form': form,
         'week_days': week_days,
         'week_offset': week_offset,
+        'time_slots': time_slots,
     }
     return render(request, 'book_facility.html', context)
+
 
 @login_required
 def dashboard(request):

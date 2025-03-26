@@ -99,13 +99,15 @@ class ContactSubmission(models.Model):
     
 
 
+from django.db import models
+from django.contrib.auth.models import User
+import datetime
 
 class FacilityBooking(models.Model):
     FACILITY_CHOICES = [
         ('gym', 'Gym'),
         ('pool', 'Pool'),
     ]
-
     LOCATION_CHOICES = [
         ('north', 'North Branch'),
         ('south', 'South Branch'),
@@ -114,27 +116,13 @@ class FacilityBooking(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, help_text="Your full name")
-    facility_type = models.CharField(
-        max_length=10, 
-        choices=FACILITY_CHOICES, 
-        help_text="Select the facility you want to use"
-    )
-    location = models.CharField(
-        max_length=10, 
-        choices=LOCATION_CHOICES, 
-        help_text="Choose the branch location"
-    )
-    date = models.DateField(help_text="Date of your session")
-    time = models.TimeField(help_text="Time of your session (9:00-17:00)")
-    additional_info = models.TextField(blank=True, help_text="Any additional details (optional)")
+    name = models.CharField(max_length=100)
+    facility_type = models.CharField(max_length=10, choices=FACILITY_CHOICES)
+    location = models.CharField(max_length=10, choices=LOCATION_CHOICES)
+    date = models.DateField()
+    time = models.TimeField()
+    additional_info = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def clean(self):
-        # Optional: Validate that time is between 9:00 and 17:00
-        if self.time < datetime.time(9, 0) or self.time > datetime.time(17, 0):
-            from django.core.exceptions import ValidationError
-            raise ValidationError("Time must be between 9:00 AM and 5:00 PM.")
 
     def __str__(self):
         return f"{self.name} - {self.facility_type} at {self.location} on {self.date} {self.time}"

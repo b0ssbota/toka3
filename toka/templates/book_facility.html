@@ -6,37 +6,31 @@
   <h2 class="text-center mb-4">Book Your Session</h2>
   <form id="bookingForm" method="post" action="{% url 'book_facility' %}">
     {% csrf_token %}
-    <!-- Basic fields -->
+    {{ form.non_field_errors }}
+
+    <!-- Basic fields (excluding date/time) -->
     <div class="mb-3">
       <label for="id_name" class="form-label">Name</label>
-      <input type="text" class="form-control" id="id_name" name="name" placeholder="Your Name" required>
+      {{ form.name }}
     </div>
     <div class="mb-3">
       <label for="id_facility_type" class="form-label">Facility Type</label>
-      <select class="form-select" id="id_facility_type" name="facility_type" required>
-        <option value="">Select a facility</option>
-        <option value="gym">Gym</option>
-        <option value="pool">Pool</option>
-      </select>
+      {{ form.facility_type }}
     </div>
     <div class="mb-3">
       <label for="id_location" class="form-label">Location</label>
-      <select class="form-select" id="id_location" name="location" required>
-        <option value="">Select a location</option>
-        <option value="north">North Branch</option>
-        <option value="south">South Branch</option>
-        <option value="east">East Branch</option>
-        <option value="west">West Branch</option>
-      </select>
+      {{ form.location }}
     </div>
     <div class="mb-3">
       <label for="id_additional_info" class="form-label">Additional Info</label>
-      <textarea class="form-control" id="id_additional_info" name="additional_info" rows="3" placeholder="Any additional details (optional)"></textarea>
+      {{ form.additional_info }}
     </div>
-    <!-- Hidden fields for date and time -->
+    
+    <!-- Hidden fields for date/time set by the modal -->
     <input type="hidden" id="id_date" name="date">
     <input type="hidden" id="id_time" name="time">
-    <!-- Button triggers the Date/Time Modal -->
+
+    <!-- Button to trigger the Date/Time Modal -->
     <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#bookingModal">
       Next: Select Date & Time
     </button>
@@ -48,42 +42,98 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content shadow">
       <div class="modal-header">
-        <!-- Week Navigation using Django links -->
-        <a href="{% url 'book_facility' %}?week_offset={{ week_offset|add:"-1" }}" class="btn btn-outline-secondary">
+        <!-- Week Navigation using links -->
+        <a href="?week_offset={{ week_offset|add:"-1" }}" class="btn btn-outline-secondary {% if week_offset == 0 %}disabled{% endif %}" 
+           id="prevWeek" aria-disabled="{% if week_offset == 0 %}true{% endif %}">
           <i class="bi bi-chevron-left"></i>
         </a>
         <h5 class="modal-title text-center flex-grow-1" id="bookingModalLabel">Select a Date</h5>
-        <a href="{% url 'book_facility' %}?week_offset={{ week_offset|add:"1" }}" class="btn btn-outline-secondary">
+        <a href="?week_offset={{ week_offset|add:"1" }}" class="btn btn-outline-secondary" id="nextWeek">
           <i class="bi bi-chevron-right"></i>
         </a>
       </div>
       <div class="modal-body">
-        <!-- Days of the Week Row -->
-        <div class="d-flex justify-content-around mb-4">
+        <!-- Days of the Week Row (server-side generation) -->
+        <div class="d-flex justify-content-around mb-4" id="weekDays">
           {% for day in week_days %}
-            <button type="button" class="btn {% if day.disabled %}btn-secondary disabled{% else %}btn-outline-light{% endif %} shadow text-dark" 
-                    name="selected_day" value="{{ day.date }}">
+            <button type="button" class="btn {% if day.disabled %}btn-secondary disabled{% else %}btn-outline-light text-dark{% endif %} shadow" 
+                    data-date="{{ day.date|date:"Y-m-d" }}">
               {{ day.formatted }}
             </button>
           {% endfor %}
         </div>
-        <!-- Available Time Slots (using radio buttons) -->
-        <div class="d-flex flex-wrap justify-content-center gap-3">
-          {% for hour in "09 10 11 12 13 14 15 16 17".split %}
-            <label class="btn btn-warning shadow text-dark">
-              <input type="radio" name="time_slot" value="{{ hour }}:00" autocomplete="off"> {{ hour }}:00
-            </label>
+        <!-- Time Slots (server-side from time_slots list) -->
+        <div class="d-flex flex-wrap justify-content-center gap-3" id="timeSlots">
+          {% for slot in time_slots %}
+            <button type="button" class="btn btn-warning shadow text-dark" data-time="{{ slot }}">
+              {{ slot }}
+            </button>
           {% endfor %}
         </div>
       </div>
       <div class="modal-footer">
-        <!-- Confirm Booking Button: When clicked, the form is submitted -->
-        <button type="submit" form="bookingForm" class="btn btn-primary">Confirm Booking</button>
+        <!-- Confirm Booking Button (submits the form after setting hidden fields) -->
+        <button type="button" class="btn btn-primary" id="confirmBooking">Confirm Booking</button>
       </div>
     </div>
   </div>
 </div>
-{% endblock %}
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  let selectedDayBtn = null;
+  let selectedTimeBtn = null;
 
+  // Day selection
+  document.querySelectorAll("#weekDays button").forEach(button => {
+    if (!button.classList.contains("disabled")) {
+      button.addEventListener("click", function() {
+        // Clear existing active states
+        document.querySelectorAll("#weekDays button").forEach(btn => {
+          btn.classList.remove("btn-warning");
+          btn.classList.remove("active");
+          btn.classList.add("btn-outline-light", "text-dark");
+        });
+        // Mark this button as active
+        this.classList.add("active", "btn-warning");
+        this.classList.remove("btn-outline-light", "text-dark");
+        selectedDayBtn = this;
+      });
+    }
+  });
+
+  // Time selection
+  document.querySelectorAll("#timeSlots button").forEach(button => {
+    button.addEventListener("click", function() {
+      document.querySelectorAll("#timeSlots button").forEach(btn => btn.classList.remove("active"));
+      this.classList.add("active");
+      selectedTimeBtn = this;
+    });
+  });
+
+  // Confirm Booking
+  document.getElementById("confirmBooking").addEventListener("click", function() {
+    if (!selectedDayBtn || !selectedTimeBtn) {
+      alert("Please select both a day and a time slot.");
+      return;
+    }
+    // Get data attributes
+    const selectedDate = selectedDayBtn.getAttribute("data-date"); 
+    const selectedTime = selectedTimeBtn.getAttribute("data-time"); 
+
+    // Set hidden fields
+    document.getElementById("id_date").value = selectedDate;
+    document.getElementById("id_time").value = selectedTime;
+
+    // Close modal
+    const bookingModal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
+    if (bookingModal) {
+      bookingModal.hide();
+    }
+
+    // Submit the form
+    document.getElementById("bookingForm").submit();
+  });
+});
+</script>
 {% endblock %}

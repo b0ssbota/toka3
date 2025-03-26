@@ -17,18 +17,10 @@ class ContactForm(forms.ModelForm):
 
 
 
+
 class FacilityBookingForm(forms.ModelForm):
     class Meta:
         model = FacilityBooking
-        fields = [
-            'name', 
-            'facility_type', 
-            'location', 
-            'date', 
-            'time', 
-            'additional_info'
-        ]
-        widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
-            'time': forms.TimeInput(attrs={'type': 'time'}),
-        }
+        fields = ['name', 'facility_type', 'location', 'additional_info']
+        # We exclude date/time from the visible form, 
+        # since they will be set by the modal (or hidden fields).
