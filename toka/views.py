@@ -394,15 +394,56 @@ def book_facility(request):
     return render(request, 'book_facility.html', context)
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import FacilityBooking
+
 @login_required
 def dashboard(request):
     # Get bookings for the current user, ordered by date and time
     bookings = FacilityBooking.objects.filter(user=request.user).order_by('-date', '-time')
-    return render(request, 'dashboard.html', {'bookings': bookings})
+    fitness_result = None
 
+    if request.method == "POST":
+        # Process fitness questionnaire submission
+        try:
+            question1 = int(request.POST.get('question1', 0))
+            question2 = int(request.POST.get('question2', 0))
+            question3 = int(request.POST.get('question3', 0))
+        except ValueError:
+            question1, question2, question3 = 0, 0, 0
 
+        total_score = question1 + question2 + question3
 
+        # Determine fitness level and message based on total score
+        if total_score <= 2:
+            level = "Beginner"
+            message = "You are just starting out. Consider adding more regular activity."
+        elif total_score <= 5:
+            level = "Intermediate"
+            message = "You have a moderate fitness level. Keep challenging yourself!"
+        else:
+            level = "Advanced"
+            message = "Great job! You are in excellent shape. Maintain your workout regimen."
 
+        fitness_result = {'level': level, 'message': message}
+        # Optionally, store the result in the session to persist it across requests
+        request.session['fitness_result'] = fitness_result
+    else:
+        # On GET, retrieve and clear any stored fitness result for a fresh questionnaire experience
+        fitness_result = request.session.pop('fitness_result', None)
+
+    context = {
+        'bookings': bookings,
+        'fitness_result': fitness_result,
+    }
+    return render(request, 'dashboard.html', context)
+
+@login_required
+def retake_fitness_questionnaire(request):
+    # Clear the stored fitness result to allow retaking the questionnaire
+    request.session.pop('fitness_result', None)
+    return redirect('dashboard')
 
 
 

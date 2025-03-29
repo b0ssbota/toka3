@@ -45,9 +45,11 @@ urlpatterns = [
     path('cookies/', cookies, name='cookies'),
     path('book/', book_facility, name='book_facility'),
     path('dashboard/', dashboard, name='dashboard'),
+    path('dashboard/retake/', retake_fitness_questionnaire, name='retake_fitness_questionnaire'),
+]
     # ... other URL patterns ...
 
-]
+
     
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
