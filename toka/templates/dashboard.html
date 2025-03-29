@@ -2,39 +2,101 @@
 {% block content %}
 <section class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4">My Bookings</h2>
-    {% if bookings %}
-      <div class="card shadow-sm">
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover table-bordered mb-0">
-              <thead class="table-dark">
-                <tr>
-                  <th class="text-center">Date</th>
-                  <th class="text-center">Time</th>
-                  <th class="text-center">Facility</th>
-                  <th class="text-center">Location</th>
-                  <th class="text-center">Additional Info</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for booking in bookings %}
-                <tr>
-                  <td class="text-center">{{ booking.date|date:"M d, Y" }}</td>
-                  <td class="text-center">{{ booking.time|time:"H:i" }}</td>
-                  <td class="text-center">{{ booking.get_facility_type_display }}</td>
-                  <td class="text-center">{{ booking.get_location_display }}</td>
-                  <td>{{ booking.additional_info|default:"N/A" }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+    <div class="row">
+      <!-- Bookings Column -->
+      <div class="col-md-8">
+        <h2 class="text-center mb-4">My Bookings</h2>
+        {% if bookings %}
+          <div class="card shadow-sm">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered mb-0">
+                  <thead class="table-dark">
+                    <tr>
+                      <th class="text-center">Date</th>
+                      <th class="text-center">Time</th>
+                      <th class="text-center">Facility</th>
+                      <th class="text-center">Location</th>
+                      <th class="text-center">Additional Info</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                      <td class="text-center">{{ booking.date|date:"M d, Y" }}</td>
+                      <td class="text-center">{{ booking.time|time:"H:i" }}</td>
+                      <td class="text-center">{{ booking.get_facility_type_display }}</td>
+                      <td class="text-center">{{ booking.get_location_display }}</td>
+                      <td>{{ booking.additional_info|default:"N/A" }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <p class="text-center">You have not booked any sessions yet.</p>
+        {% endif %}
+      </div>
+      
+      <!-- Fitness Questionnaire Column -->
+      <div class="col-md-4">
+        <h2 class="text-center mb-4">Fitness Questionnaire</h2>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!-- Questionnaire Form -->
+            <form method="post" action="{% url 'fitness_questionnaire' %}">
+              {% csrf_token %}
+              <!-- Question 1 -->
+              <div class="mb-3">
+                <label for="question1" class="form-label">How often do you exercise?</label>
+                <select class="form-select" id="question1" name="question1">
+                  <option value="0">Rarely</option>
+                  <option value="1">1-2 times per week</option>
+                  <option value="2">3-4 times per week</option>
+                  <option value="3">5 or more times per week</option>
+                </select>
+              </div>
+              <!-- Question 2 -->
+              <div class="mb-3">
+                <label for="question2" class="form-label">Rate your cardiovascular fitness:</label>
+                <select class="form-select" id="question2" name="question2">
+                  <option value="0">Poor</option>
+                  <option value="1">Below Average</option>
+                  <option value="2">Average</option>
+                  <option value="3">Above Average</option>
+                </select>
+              </div>
+              <!-- Question 3 -->
+              <div class="mb-3">
+                <label for="question3" class="form-label">How would you rate your strength?</label>
+                <select class="form-select" id="question3" name="question3">
+                  <option value="0">Weak</option>
+                  <option value="1">Below Average</option>
+                  <option value="2">Average</option>
+                  <option value="3">Strong</option>
+                </select>
+              </div>
+              <!-- Submit Button -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+
+            <!-- Display Result if available -->
+            {% if fitness_result %}
+              <div class="mt-4 text-center">
+                <h4>Your Fitness Level: {{ fitness_result.level }}</h4>
+                <p>{{ fitness_result.message }}</p>
+                <a href="{% url 'retake_fitness_questionnaire' %}" class="btn btn-secondary">Retake</a>
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>
-    {% else %}
-      <p class="text-center">You have not booked any sessions yet.</p>
-    {% endif %}
+      
+    </div>
   </div>
 </section>
 {% endblock %}
