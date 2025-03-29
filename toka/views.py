@@ -401,7 +401,7 @@ def dashboard(request):
     fitness_result = None
 
     if request.method == "POST":
-        # Process fitness questionnaire submission
+        # Process the fitness questionnaire submission
         try:
             question1 = int(request.POST.get('question1', 0))
             question2 = int(request.POST.get('question2', 0))
@@ -422,12 +422,17 @@ def dashboard(request):
             level = "Advanced"
             message = "Great job! You are in excellent shape. Maintain your workout regimen."
 
-        fitness_result = {'level': level, 'message': message}
-        # Optionally, store the result in the session to persist it across requests
-        request.session['fitness_result'] = fitness_result
+        # Save the result in the database
+        fitness_result = FitnessAssessment.objects.create(
+            user=request.user,
+            level=level,
+            message=message,
+            total_score=total_score
+        )
+
     else:
-        # On GET, retrieve and clear any stored fitness result for a fresh questionnaire experience
-        fitness_result = request.session.pop('fitness_result', None)
+        # On GET, retrieve the most recent fitness result for the user (if any)
+        fitness_result = FitnessAssessment.objects.filter(user=request.user).order_by('-created_at').first()
 
     context = {
         'bookings': bookings,
@@ -437,10 +442,10 @@ def dashboard(request):
 
 @login_required
 def retake_fitness_questionnaire(request):
-    # Clear the stored fitness result to allow retaking the questionnaire
-    request.session.pop('fitness_result', None)
+    # Optionally, you might want to just redirect to the dashboard.
+    # Since previous results are stored, the latest will be shown,
+    # and a new submission will create a new record.
     return redirect('dashboard')
-
 
 
 

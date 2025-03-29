@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+from django.conf import settings
+
 
 class WorkoutClass(models.Model):
     name = models.CharField(max_length=255)
@@ -99,9 +101,6 @@ class ContactSubmission(models.Model):
     
 
 
-from django.db import models
-from django.contrib.auth.models import User
-import datetime
 
 class FacilityBooking(models.Model):
     FACILITY_CHOICES = [
@@ -126,3 +125,13 @@ class FacilityBooking(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.facility_type} at {self.location} on {self.date} {self.time}"
+
+class FitnessAssessment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    level = models.CharField(max_length=20)
+    message = models.TextField()
+    total_score = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.level} ({self.total_score})"
