@@ -44,6 +44,7 @@ urlpatterns = [
     path('terms/', terms, name='terms'),
     path('cookies/', cookies, name='cookies'),
     path('book/', book_facility, name='book_facility'),
+    path('cancel/<int:booking_id>/', cancel_booking, name='cancel_booking'),
     path('dashboard/', dashboard, name='dashboard'),
     path('dashboard/retake/', retake_fitness_questionnaire, name='retake_fitness_questionnaire'),
 ]

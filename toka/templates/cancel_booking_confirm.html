@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow p-4">
+    <h2 class="text-center mb-4">Cancel Booking</h2>
+    <p class="text-center">
+      Are you sure you want to cancel your booking for <strong>{{ booking.get_facility_type_display }}</strong>
+      at <strong>{{ booking.get_location_display }}</strong> on 
+      <strong>{{ booking.date|date:"M d, Y" }} {{ booking.time|time:"H:i" }}</strong>?
+    </p>
+    <div class="d-flex justify-content-center">
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger me-2">Yes, Cancel</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">No, Go Back</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

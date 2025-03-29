@@ -3,7 +3,7 @@
 <section class="py-5">
   <div class="container">
     <div class="row">
-      <!-- Bookings Column -->
+      <!-- Bookings Column with Cancel Option -->
       <div class="col-md-8">
         <h2 class="text-center mb-4">My Bookings</h2>
         {% if bookings %}
@@ -18,6 +18,7 @@
                       <th class="text-center">Facility</th>
                       <th class="text-center">Location</th>
                       <th class="text-center">Additional Info</th>
+                      <th class="text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -28,6 +29,13 @@
                       <td class="text-center">{{ booking.get_facility_type_display }}</td>
                       <td class="text-center">{{ booking.get_location_display }}</td>
                       <td>{{ booking.additional_info|default:"N/A" }}</td>
+                      <td class="text-center">
+                        <!-- Cancel button triggers cancellation -->
+                        <form method="post" action="{% url 'cancel_booking' booking.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                        </form>
+                      </td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -84,7 +92,7 @@
               </div>
             </form>
 
-            <!-- Display Result if available -->
+            <!-- Display Fitness Result if available -->
             {% if fitness_result %}
               <div class="mt-4 text-center">
                 <h4>Your Fitness Level: {{ fitness_result.level }}</h4>

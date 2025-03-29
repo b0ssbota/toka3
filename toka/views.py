@@ -321,8 +321,6 @@ def contact(request):
     return render(request, 'contact.html', {'form': form})
 
 
-
-
 @login_required
 def book_facility(request):
     # 1) Determine which week to display
@@ -364,7 +362,6 @@ def book_facility(request):
             booking.user = request.user
 
             # Retrieve date/time from hidden fields in the form
-            # or from request.POST if using direct inputs
             str_date = request.POST.get('date')
             str_time = request.POST.get('time')
             if not str_date or not str_time:
@@ -379,6 +376,17 @@ def book_facility(request):
                 messages.error(request, "Invalid date/time format.")
                 return redirect('book_facility')
 
+            # --- Double-booking prevention ---
+            if FacilityBooking.objects.filter(
+                facility_type=booking.facility_type,
+                location=booking.location,
+                date=booking.date,
+                time=booking.time
+            ).exists():
+                messages.error(request, "This time slot is already booked. Please select another time.")
+                return redirect('book_facility')
+            # ---------------------------------
+
             booking.save()
             messages.success(request, "Booking submitted!")
             return redirect('dashboard')
@@ -392,6 +400,16 @@ def book_facility(request):
         'time_slots': time_slots,
     }
     return render(request, 'book_facility.html', context)
+
+
+@login_required
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(FacilityBooking, id=booking_id, user=request.user)
+    if request.method == "POST":
+        booking.delete()
+        messages.success(request, "Booking cancelled successfully.")
+        return redirect('dashboard')
+    return render(request, 'cancel_booking_confirm.html', {'booking': booking})
 
 
 @login_required
