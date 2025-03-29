@@ -394,10 +394,6 @@ def book_facility(request):
     return render(request, 'book_facility.html', context)
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import FacilityBooking
-
 @login_required
 def dashboard(request):
     # Get bookings for the current user, ordered by date and time
