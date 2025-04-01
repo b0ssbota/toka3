@@ -414,49 +414,102 @@ def cancel_booking(request, booking_id):
 
 @login_required
 def dashboard(request):
-    # Get bookings for the current user, ordered by date and time
+    from datetime import datetime, time, date, timedelta
     bookings = FacilityBooking.objects.filter(user=request.user).order_by('-date', '-time')
     fitness_result = None
+    calorie_result = None
+    weekly_logs = None
+    weekly_status = None
 
     if request.method == "POST":
-        # Process the fitness questionnaire submission
-        try:
-            question1 = int(request.POST.get('question1', 0))
-            question2 = int(request.POST.get('question2', 0))
-            question3 = int(request.POST.get('question3', 0))
-        except ValueError:
-            question1, question2, question3 = 0, 0, 0
-
-        total_score = question1 + question2 + question3
-
-        # Determine fitness level and message based on total score
-        if total_score <= 2:
-            level = "Beginner"
-            message = "You are just starting out. Consider adding more regular activity."
-        elif total_score <= 5:
-            level = "Intermediate"
-            message = "You have a moderate fitness level. Keep challenging yourself!"
+        # Check if the calorie counter form is submitted (by checking for calorie_goal)
+        if 'calorie_goal' in request.POST:
+            try:
+                calorie_goal = float(request.POST.get('calorie_goal'))
+                calories_consumed = float(request.POST.get('calories_consumed', 0))
+                now = datetime.now()
+                start_of_day = datetime.combine(date.today(), time.min)
+                hours_elapsed = (now - start_of_day).seconds / 3600.0
+                if hours_elapsed == 0:
+                    predicted_total = calories_consumed
+                else:
+                    predicted_total = (calories_consumed / hours_elapsed) * 24
+                calorie_diff = calorie_goal - predicted_total
+                calorie_result = {
+                    'goal': calorie_goal,
+                    'consumed': calories_consumed,
+                    'predicted': round(predicted_total),
+                    'difference': round(calorie_diff)
+                }
+                # Save or update the CalorieLog for today
+                today = date.today()
+                calorie_log, created = CalorieLog.objects.get_or_create(
+                    user=request.user,
+                    date=today,
+                    defaults={
+                        'calorie_goal': calorie_goal,
+                        'calories_consumed': calories_consumed,
+                        'predicted': predicted_total,
+                        'difference': calorie_diff
+                    }
+                )
+                if not created:
+                    calorie_log.calorie_goal = calorie_goal
+                    calorie_log.calories_consumed = calories_consumed
+                    calorie_log.predicted = predicted_total
+                    calorie_log.difference = calorie_diff
+                    calorie_log.save()
+            except ValueError:
+                calorie_result = None
         else:
-            level = "Advanced"
-            message = "Great job! You are in excellent shape. Maintain your workout regimen."
+            # Process the fitness questionnaire submission
+            try:
+                question1 = int(request.POST.get('question1', 0))
+                question2 = int(request.POST.get('question2', 0))
+                question3 = int(request.POST.get('question3', 0))
+            except ValueError:
+                question1, question2, question3 = 0, 0, 0
 
-        # Save the result in the database
-        fitness_result = FitnessAssessment.objects.create(
-            user=request.user,
-            level=level,
-            message=message,
-            total_score=total_score
-        )
+            total_score = question1 + question2 + question3
 
+            if total_score <= 2:
+                level = "Beginner"
+                message = "You are just starting out. Consider adding more regular activity."
+            elif total_score <= 5:
+                level = "Intermediate"
+                message = "You have a moderate fitness level. Keep challenging yourself!"
+            else:
+                level = "Advanced"
+                message = "Great job! You are in excellent shape. Maintain your workout regimen."
+
+            fitness_result = FitnessAssessment.objects.create(
+                user=request.user,
+                level=level,
+                message=message,
+                total_score=total_score
+            )
     else:
-        # On GET, retrieve the most recent fitness result for the user (if any)
         fitness_result = FitnessAssessment.objects.filter(user=request.user).order_by('-created_at').first()
+
+    # Retrieve calorie logs for the past 7 days (including today)
+    week_start = date.today() - timedelta(days=6)
+    weekly_logs = CalorieLog.objects.filter(user=request.user, date__gte=week_start).order_by('date')
+    total_weekly_diff = sum(log.difference for log in weekly_logs)
+    # Determine overall weekly status
+    if total_weekly_diff >= 0:
+        weekly_status = f"Great job! You're under your calorie goal by a total of {round(total_weekly_diff)} calories this week."
+    else:
+        weekly_status = f"This week, you've exceeded your calorie goal by {abs(round(total_weekly_diff))} calories. Consider adjustments."
 
     context = {
         'bookings': bookings,
         'fitness_result': fitness_result,
+        'calorie_result': calorie_result,
+        'weekly_logs': weekly_logs,
+        'weekly_status': weekly_status,
     }
     return render(request, 'dashboard.html', context)
+
 
 @login_required
 def retake_fitness_questionnaire(request):

@@ -135,3 +135,16 @@ class FitnessAssessment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.level} ({self.total_score})"
+    
+  
+
+class CalorieLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    calorie_goal = models.FloatField()
+    calories_consumed = models.FloatField()
+    predicted = models.FloatField()
+    difference = models.FloatField()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.date}"

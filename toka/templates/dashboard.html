@@ -105,6 +105,43 @@
       </div>
       
     </div>
+    <!-- New Row for Calorie Counter -->
+    <div class="row mt-5">
+      <div class="col-md-12">
+        <h2 class="text-center mb-4">Calorie Counter</h2>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!-- Calorie Counter Form -->
+            <form method="post" action="{% url 'dashboard' %}">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="calorie_goal_input" class="form-label">Daily Calorie Goal</label>
+                <input type="number" step="any" class="form-control" id="calorie_goal_input" name="calorie_goal" placeholder="Enter your daily calorie goal" required>
+              </div>
+              <div class="mb-3">
+                <label for="calories_consumed" class="form-label">Calories Consumed So Far</label>
+                <input type="number" step="any" class="form-control" id="calories_consumed" name="calories_consumed" placeholder="Enter calories consumed so far" required>
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Calculate</button>
+              </div>
+            </form>
+            <!-- Display Calorie Counter Result if available -->
+            {% if calorie_result %}
+              <div class="mt-4 text-center">
+                <h4>Calorie Counter Results</h4>
+                <p>Predicted End-of-Day Calories: {{ calorie_result.predicted }}</p>
+                {% if calorie_result.difference >= 0 %}
+                  <p>You are under your goal by {{ calorie_result.difference }} calories.</p>
+                {% else %}
+                  <p>You are over your goal by {{ calorie_result.difference|abs }} calories.</p>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 {% endblock %}
