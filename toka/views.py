@@ -412,9 +412,9 @@ def cancel_booking(request, booking_id):
     return render(request, 'cancel_booking_confirm.html', {'booking': booking})
 
 
+
 @login_required
 def dashboard(request):
-    from datetime import datetime, time, date, timedelta
     bookings = FacilityBooking.objects.filter(user=request.user).order_by('-date', '-time')
     fitness_result = None
     calorie_result = None
@@ -422,7 +422,7 @@ def dashboard(request):
     weekly_status = None
 
     if request.method == "POST":
-        # Check if the calorie counter form is submitted (by checking for calorie_goal)
+        # Check if the calorie counter form is submitted (by checking for calorie_goal in POST)
         if 'calorie_goal' in request.POST:
             try:
                 calorie_goal = float(request.POST.get('calorie_goal'))
@@ -430,6 +430,7 @@ def dashboard(request):
                 now = datetime.now()
                 start_of_day = datetime.combine(date.today(), time.min)
                 hours_elapsed = (now - start_of_day).seconds / 3600.0
+                # Prevent division by zero if the day has just started
                 if hours_elapsed == 0:
                     predicted_total = calories_consumed
                 else:
@@ -495,7 +496,6 @@ def dashboard(request):
     week_start = date.today() - timedelta(days=6)
     weekly_logs = CalorieLog.objects.filter(user=request.user, date__gte=week_start).order_by('date')
     total_weekly_diff = sum(log.difference for log in weekly_logs)
-    # Determine overall weekly status
     if total_weekly_diff >= 0:
         weekly_status = f"Great job! You're under your calorie goal by a total of {round(total_weekly_diff)} calories this week."
     else:
@@ -510,14 +510,6 @@ def dashboard(request):
     }
     return render(request, 'dashboard.html', context)
 
-
 @login_required
 def retake_fitness_questionnaire(request):
-    # Optionally, you might want to just redirect to the dashboard.
-    # Since previous results are stored, the latest will be shown,
-    # and a new submission will create a new record.
     return redirect('dashboard')
-
-
-
-

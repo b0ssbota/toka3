@@ -3,7 +3,7 @@
 <section class="py-5">
   <div class="container">
     <div class="row">
-      <!-- Bookings Column with Cancel Option -->
+      <!-- Bookings Column -->
       <div class="col-md-8">
         <h2 class="text-center mb-4">My Bookings</h2>
         {% if bookings %}
@@ -30,7 +30,6 @@
                       <td class="text-center">{{ booking.get_location_display }}</td>
                       <td>{{ booking.additional_info|default:"N/A" }}</td>
                       <td class="text-center">
-                        <!-- Cancel button triggers cancellation -->
                         <form method="post" action="{% url 'cancel_booking' booking.id %}">
                           {% csrf_token %}
                           <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
@@ -53,10 +52,8 @@
         <h2 class="text-center mb-4">Fitness Questionnaire</h2>
         <div class="card shadow-sm">
           <div class="card-body">
-            <!-- Questionnaire Form -->
             <form method="post" action="{% url 'dashboard' %}">
               {% csrf_token %}
-              <!-- Question 1 -->
               <div class="mb-3">
                 <label for="question1" class="form-label">How often do you exercise?</label>
                 <select class="form-select" id="question1" name="question1">
@@ -66,7 +63,6 @@
                   <option value="3">5 or more times per week</option>
                 </select>
               </div>
-              <!-- Question 2 -->
               <div class="mb-3">
                 <label for="question2" class="form-label">Rate your cardiovascular fitness:</label>
                 <select class="form-select" id="question2" name="question2">
@@ -76,7 +72,6 @@
                   <option value="3">Above Average</option>
                 </select>
               </div>
-              <!-- Question 3 -->
               <div class="mb-3">
                 <label for="question3" class="form-label">How would you rate your strength?</label>
                 <select class="form-select" id="question3" name="question3">
@@ -86,13 +81,10 @@
                   <option value="3">Strong</option>
                 </select>
               </div>
-              <!-- Submit Button -->
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </form>
-
-            <!-- Display Fitness Result if available -->
             {% if fitness_result %}
               <div class="mt-4 text-center">
                 <h4>Your Fitness Level: {{ fitness_result.level }}</h4>
@@ -103,15 +95,14 @@
           </div>
         </div>
       </div>
-      
     </div>
-    <!-- New Row for Calorie Counter -->
+    
+    <!-- Calorie Counter Section -->
     <div class="row mt-5">
       <div class="col-md-12">
         <h2 class="text-center mb-4">Calorie Counter</h2>
         <div class="card shadow-sm">
           <div class="card-body">
-            <!-- Calorie Counter Form -->
             <form method="post" action="{% url 'dashboard' %}">
               {% csrf_token %}
               <div class="mb-3">
@@ -126,7 +117,6 @@
                 <button type="submit" class="btn btn-primary">Calculate</button>
               </div>
             </form>
-            <!-- Display Calorie Counter Result if available -->
             {% if calorie_result %}
               <div class="mt-4 text-center">
                 <h4>Calorie Counter Results</h4>
@@ -142,6 +132,53 @@
         </div>
       </div>
     </div>
+    
+    <!-- Weekly Calorie Summary Section -->
+    <div class="row mt-5">
+      <div class="col-md-12">
+        <h2 class="text-center mb-4">Weekly Calorie Summary</h2>
+        {% if weekly_logs %}
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <table class="table table-bordered">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Date</th>
+                    <th>Calorie Goal</th>
+                    <th>Calories Consumed</th>
+                    <th>Predicted End-of-Day</th>
+                    <th>Difference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for log in weekly_logs %}
+                  <tr>
+                    <td>{{ log.date|date:"M d, Y" }}</td>
+                    <td>{{ log.calorie_goal }}</td>
+                    <td>{{ log.calories_consumed }}</td>
+                    <td>{{ log.predicted|round }}</td>
+                    <td>
+                      {% if log.difference >= 0 %}
+                        Under by {{ log.difference|round }}
+                      {% else %}
+                        Over by {{ log.difference|abs|round }}
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="mt-3 text-center">
+                <h4>{{ weekly_status }}</h4>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <p class="text-center">No calorie logs for the past week.</p>
+        {% endif %}
+      </div>
+    </div>
+    
   </div>
 </section>
 {% endblock %}
