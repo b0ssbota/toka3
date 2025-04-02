@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load math_extras %}
+
 {% block content %}
 <section class="py-5">
   <div class="container">
@@ -118,7 +120,7 @@
                 <button type="submit" class="btn btn-primary">Calculate</button>
               </div>
             </form>
-
+ 
             {% if calorie_result %}
               <div class="mt-4 text-center">
                 <h4>Calorie Counter Results</h4>
