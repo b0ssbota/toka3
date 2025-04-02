@@ -160,12 +160,13 @@
                     <td>{{ log.date|date:"M d, Y" }}</td>
                     <td>{{ log.calorie_goal }}</td>
                     <td>{{ log.calories_consumed }}</td>
-                    <td>{{ log.predicted|round }}</td>
+                    <td>{{ log.predicted|floatformat:0 }}</td>
                     <td>
                       {% if log.difference >= 0 %}
                         Under by {{ log.difference|round }}
                       {% else %}
-                        Over by {{ log.difference|abs|round }}
+                        Over by {{ log.difference|floatformat:2 }}
+
                       {% endif %}
                     </td>
                   </tr>

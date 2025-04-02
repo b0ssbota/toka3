@@ -11,7 +11,7 @@ def abs(value):
         return value
 
 @register.filter
-def round_number(value, decimals=0):
+def round(value, decimals=0):
     """
     Rounds the given value to the specified number of decimals.
     Usage in template: {{ value|round_number }} or {{ value|round_number:2 }}
