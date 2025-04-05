@@ -140,7 +140,7 @@ class FitnessAssessment(models.Model):
 
 class CalorieLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()  # User-provided date
     calorie_goal = models.FloatField()
     calories_consumed = models.FloatField()
     predicted = models.FloatField()
@@ -148,3 +148,11 @@ class CalorieLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.date}"
+
+class WeeklyCalorieGoal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    week_start = models.DateField()  # e.g., Monday of the week
+    calorie_goal = models.FloatField()
+
+    def __str__(self):
+        return f"{self.user.username} - Week of {self.week_start}"
