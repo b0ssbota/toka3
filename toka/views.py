@@ -417,26 +417,22 @@ def cancel_booking(request, booking_id):
 
 @login_required
 def dashboard(request):
-    # Your existing bookings and fitness questionnaire processing...
+    # --- Existing Booking Code ---
     bookings = FacilityBooking.objects.filter(user=request.user).order_by('-date', '-time')
     fitness_result = None
-    # (Assume your fitness questionnaire code remains here)
 
-    # Process additional POST actions for calorie goals & logs
     if request.method == "POST":
         action = request.POST.get('action')
         if action == 'weekly_goal':
-            # Process weekly calorie goal form
+            # Process weekly calorie goal form.
             try:
                 weekly_goal = float(request.POST.get('weekly_goal'))
                 week_start_input = request.POST.get('week_start')
                 if week_start_input:
                     week_start = datetime.strptime(week_start_input, '%Y-%m-%d').date()
                 else:
-                    # Default: use Monday of current week
                     today = date.today()
                     week_start = today - timedelta(days=today.weekday())
-                # Update or create the weekly goal for that week
                 WeeklyCalorieGoal.objects.update_or_create(
                     user=request.user,
                     week_start=week_start,
@@ -446,25 +442,28 @@ def dashboard(request):
                 pass
 
         elif action == 'daily_log':
-            # Process daily calorie log entry form
+            # Process daily calorie log entry form.
             try:
-                date_str = request.POST.get('log_date')
-                if date_str:
-                    log_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                log_date_str = request.POST.get('log_date')
+                if log_date_str:
+                    log_date = datetime.strptime(log_date_str, '%Y-%m-%d').date()
                 else:
                     log_date = date.today()
                 calorie_goal = float(request.POST.get('calorie_goal'))
                 calories_consumed = float(request.POST.get('calories_consumed', 0))
 
-                # For today, use time-based prediction; for past dates, assume final values.
+                # For today's log, compute a time-based predicted value.
                 if log_date == date.today():
                     now = datetime.now()
                     start_of_day = datetime.combine(date.today(), time.min)
                     hours_elapsed = (now - start_of_day).seconds / 3600.0
-                    predicted_total = (calories_consumed if hours_elapsed == 0 
-                                       else (calories_consumed / hours_elapsed) * 24)
+                    if hours_elapsed == 0:
+                        predicted_total = calories_consumed
+                    else:
+                        predicted_total = (calories_consumed / hours_elapsed) * 24
                 else:
                     predicted_total = calories_consumed
+
                 calorie_diff = calorie_goal - predicted_total
 
                 CalorieLog.objects.update_or_create(
@@ -474,14 +473,14 @@ def dashboard(request):
                         'calorie_goal': calorie_goal,
                         'calories_consumed': calories_consumed,
                         'predicted': predicted_total,
-                        'difference': calorie_diff,
+                        'difference': calorie_diff
                     }
                 )
             except ValueError:
                 pass
 
         elif action == 'delete_log':
-            # Delete a daily calorie log entry
+            # Delete a daily log entry.
             log_id = request.POST.get('log_id')
             try:
                 log = CalorieLog.objects.get(id=log_id, user=request.user)
@@ -490,7 +489,7 @@ def dashboard(request):
                 pass
 
         else:
-            # Process fitness questionnaire (if action not specified, assume fitness form)
+            # Process the fitness questionnaire submission.
             try:
                 question1 = int(request.POST.get('question1', 0))
                 question2 = int(request.POST.get('question2', 0))
@@ -508,28 +507,30 @@ def dashboard(request):
             else:
                 level = "Advanced"
                 message = "Great job! You are in excellent shape. Maintain your workout regimen."
+
             fitness_result = FitnessAssessment.objects.create(
                 user=request.user,
                 level=level,
                 message=message,
                 total_score=total_score
             )
-
     else:
-        # GET: retrieve the most recent fitness result
         fitness_result = FitnessAssessment.objects.filter(user=request.user).order_by('-created_at').first()
 
-    # Get all calorie logs for the user (you could filter by a date range if desired)
+    # --- Calorie Log & Weekly Goal Processing ---
     all_logs = CalorieLog.objects.filter(user=request.user).order_by('date')
-    # Group logs by week (using Monday as the week start)
     weekly_logs = defaultdict(list)
     for log in all_logs:
         week_start = log.date - timedelta(days=log.date.weekday())
         weekly_logs[week_start].append(log)
 
-    # Compute current week status (for display)
     today = date.today()
     current_week_start = today - timedelta(days=today.weekday())
+    try:
+        current_week_goal = WeeklyCalorieGoal.objects.get(user=request.user, week_start=current_week_start)
+    except WeeklyCalorieGoal.DoesNotExist:
+        current_week_goal = None
+
     current_week_logs = weekly_logs.get(current_week_start, [])
     total_weekly_diff = sum(log.difference for log in current_week_logs)
     if total_weekly_diff >= 0:
@@ -537,18 +538,13 @@ def dashboard(request):
     else:
         weekly_status = f"You've exceeded your calorie goal by {abs(round(total_weekly_diff))} calories this week."
 
-    # Try to get the weekly goal for the current week (if set)
-    try:
-        current_week_goal = WeeklyCalorieGoal.objects.get(user=request.user, week_start=current_week_start)
-    except WeeklyCalorieGoal.DoesNotExist:
-        current_week_goal = None
-
     context = {
         'bookings': bookings,
         'fitness_result': fitness_result,
-        'weekly_logs': dict(weekly_logs),  # convert defaultdict to dict for template iteration
+        'weekly_logs': dict(weekly_logs),  # convert defaultdict to dict
         'weekly_status': weekly_status,
         'current_week_goal': current_week_goal,
+        'today': today,
     }
     return render(request, 'dashboard.html', context)
 
