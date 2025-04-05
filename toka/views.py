@@ -10,6 +10,8 @@ from .forms import *
 from .models import *
 from django.contrib import messages
 from datetime import datetime, time, date, timedelta
+from collections import defaultdict
+
 
 def home(request):
     # Query top 4 items
