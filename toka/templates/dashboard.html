@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load math_extras %}  {# If you still need your custom filters, e.g., for abs #}
+{% load math_extras %}
 {% block content %}
 <section class="py-5">
   <div class="container">
-    <!-- Existing Bookings & Fitness Questionnaire sections here... -->
+    <!-- Your existing Bookings and Fitness Questionnaire sections go here... -->
 
     <!-- Weekly Calorie Goal Section -->
     <div class="row mt-5">
@@ -17,12 +17,15 @@
               <div class="mb-3">
                 <label for="weekly_goal_input" class="form-label">Weekly Calorie Goal</label>
                 <input type="number" step="any" class="form-control" id="weekly_goal_input" name="weekly_goal" placeholder="Enter your weekly calorie goal" required
-                  value="{{ current_week_goal.calorie_goal|default_if_none:'' }}">
+                  value="{% if current_week_goal %}{{ current_week_goal.calorie_goal }}{% endif %}">
               </div>
               <div class="mb-3">
                 <label for="week_start_input" class="form-label">Week Start Date</label>
-                <input type="date" class="form-control" id="week_start_input" name="week_start" required
-                  value="{{ current_week_goal.week_start|date:'Y-m-d'|default:today|default_if_none:today }}">
+                {% if current_week_goal %}
+                  <input type="date" class="form-control" id="week_start_input" name="week_start" required value="{{ current_week_goal.week_start|date:'Y-m-d' }}">
+                {% else %}
+                  <input type="date" class="form-control" id="week_start_input" name="week_start" required value="{{ today|date:'Y-m-d' }}">
+                {% endif %}
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Save Weekly Goal</button>
@@ -125,7 +128,7 @@
         <h4>{{ weekly_status }}</h4>
       </div>
     </div>
-    
+
   </div>
 </section>
 {% endblock %}
