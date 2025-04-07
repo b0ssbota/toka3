@@ -1,29 +1,30 @@
 {% extends "base.html" %}
 {% load math_extras %}
 {% block content %}
-<section class="py-5">
+<section class="py-5 bg-light">
   <div class="container">
 
     <!-- Dashboard Header -->
-    <div class="row mb-4">
-      <div class="col">
-        <h1 class="display-4 text-center">Dashboard</h1>
-        <p class="lead text-center">Manage your bookings, fitness progress, and calorie tracking all in one place.</p>
+    <div class="row mb-5">
+      <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-4 fw-bold text-primary">My Fitness Dashboard</h1>
+        <p class="lead text-muted">Manage your bookings, fitness progress, and calorie tracking all in one place.</p>
+        <hr class="my-4 mx-auto" style="width: 50%;">
       </div>
     </div>
 
     <!-- Bookings & Fitness Questionnaire -->
-    <div class="row">
+    <div class="row g-4">
       <!-- Bookings Section -->
-      <div class="col-md-8 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">My Bookings</h4>
+      <div class="col-lg-8">
+        <div class="card shadow border-0 h-100">
+          <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0"><i class="fas fa-calendar-check me-2"></i>My Bookings</h4>
           </div>
-          <div class="card-body">
+          <div class="card-body p-0">
             {% if bookings %}
               <div class="table-responsive">
-                <table class="table table-hover table-bordered">
+                <table class="table table-hover mb-0">
                   <thead class="table-dark">
                     <tr>
                       <th class="text-center">Date</th>
@@ -45,7 +46,9 @@
                       <td class="text-center">
                         <form method="post" action="{% url 'cancel_booking' booking.id %}">
                           {% csrf_token %}
-                          <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                          <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                            <i class="fas fa-times me-1"></i>Cancel
+                          </button>
                         </form>
                       </td>
                     </tr>
@@ -54,60 +57,73 @@
                 </table>
               </div>
             {% else %}
-              <p class="text-center mb-0">You have not booked any sessions yet.</p>
+              <div class="text-center py-5">
+                <i class="fas fa-calendar-xmark fa-3x text-muted mb-3"></i>
+                <p class="lead mb-0">You have not booked any sessions yet.</p>
+                <a href="{% url 'book_facility' %}" class="btn btn-primary mt-3">Book a Session Now</a>
+              </div>
             {% endif %}
           </div>
         </div>
       </div>
 
       <!-- Fitness Questionnaire Section -->
-      <div class="col-md-4 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-success text-white">
-            <h4 class="mb-0">Fitness Questionnaire</h4>
+      <div class="col-lg-4">
+        <div class="card shadow border-0 h-100">
+          <div class="card-header bg-success text-white py-3">
+            <h4 class="mb-0"><i class="fas fa-heartbeat me-2"></i>Fitness Profile</h4>
           </div>
           <div class="card-body">
-            <form method="post" action="{% url 'dashboard' %}">
-              {% csrf_token %}
-              <!-- No hidden action so this processes as fitness form -->
-              <div class="mb-3">
-                <label for="question1" class="form-label">How often do you exercise?</label>
-                <select class="form-select" id="question1" name="question1">
-                  <option value="0">Rarely</option>
-                  <option value="1">1-2 times per week</option>
-                  <option value="2">3-4 times per week</option>
-                  <option value="3">5 or more times per week</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="question2" class="form-label">Rate your cardiovascular fitness:</label>
-                <select class="form-select" id="question2" name="question2">
-                  <option value="0">Poor</option>
-                  <option value="1">Below Average</option>
-                  <option value="2">Average</option>
-                  <option value="3">Above Average</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="question3" class="form-label">How would you rate your strength?</label>
-                <select class="form-select" id="question3" name="question3">
-                  <option value="0">Weak</option>
-                  <option value="1">Below Average</option>
-                  <option value="2">Average</option>
-                  <option value="3">Strong</option>
-                </select>
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-success">Submit</button>
-              </div>
-            </form>
-
             {% if fitness_result %}
-              <div class="mt-3 text-center">
-                <h5>Your Fitness Level: {{ fitness_result.level }}</h5>
-                <p>{{ fitness_result.message }}</p>
-                <a href="{% url 'retake_fitness_questionnaire' %}" class="btn btn-secondary btn-sm">Retake</a>
+              <div class="text-center mb-4">
+                <div class="display-6 fw-bold 
+                  {% if fitness_result.level == 'Beginner' %}text-danger
+                  {% elif fitness_result.level == 'Intermediate' %}text-warning
+                  {% elif fitness_result.level == 'Advanced' %}text-success
+                  {% else %}text-primary{% endif %}">
+                  {{ fitness_result.level }}
+                </div>
+                <p class="mt-2">{{ fitness_result.message }}</p>
+                <a href="{% url 'retake_fitness_questionnaire' %}" class="btn btn-outline-success btn-sm rounded-pill">
+                  <i class="fas fa-sync me-1"></i>Retake Assessment
+                </a>
               </div>
+            {% else %}
+              <form method="post" action="{% url 'dashboard' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="question1" class="form-label fw-bold">How often do you exercise?</label>
+                  <select class="form-select form-select-lg" id="question1" name="question1">
+                    <option value="0">Rarely</option>
+                    <option value="1">1-2 times per week</option>
+                    <option value="2">3-4 times per week</option>
+                    <option value="3">5 or more times per week</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="question2" class="form-label fw-bold">Rate your cardiovascular fitness:</label>
+                  <select class="form-select form-select-lg" id="question2" name="question2">
+                    <option value="0">Poor</option>
+                    <option value="1">Below Average</option>
+                    <option value="2">Average</option>
+                    <option value="3">Above Average</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="question3" class="form-label fw-bold">How would you rate your strength?</label>
+                  <select class="form-select form-select-lg" id="question3" name="question3">
+                    <option value="0">Weak</option>
+                    <option value="1">Below Average</option>
+                    <option value="2">Average</option>
+                    <option value="3">Strong</option>
+                  </select>
+                </div>
+                <div class="d-grid mt-4">
+                  <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-check-circle me-2"></i>Submit Assessment
+                  </button>
+                </div>
+              </form>
             {% endif %}
           </div>
         </div>
@@ -115,32 +131,44 @@
     </div>
 
     <!-- Calorie Tracking Section -->
-    <div class="row mt-5">
+    <div class="row g-4 mt-4">
+      <div class="col-12">
+        <h2 class="text-center mb-4 fw-bold text-secondary">Calorie Management</h2>
+      </div>
+      
       <!-- Weekly Calorie Goal Form -->
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-info text-white">
-            <h4 class="mb-0">Set Weekly Calorie Goal</h4>
+      <div class="col-md-6">
+        <div class="card shadow border-0 h-100">
+          <div class="card-header bg-info text-white py-3">
+            <h4 class="mb-0"><i class="fas fa-bullseye me-2"></i>Set Weekly Calorie Goal</h4>
           </div>
-          <div class="card-body">
+          <div class="card-body p-4">
             <form method="post" action="{% url 'dashboard' %}">
               {% csrf_token %}
               <input type="hidden" name="action" value="weekly_goal">
-              <div class="mb-3">
-                <label for="weekly_goal_input" class="form-label">Weekly Calorie Goal</label>
-                <input type="number" step="any" class="form-control" id="weekly_goal_input" name="weekly_goal" placeholder="Enter weekly goal" required
-                  value="{% if current_week_goal %}{{ current_week_goal.calorie_goal }}{% endif %}">
+              <div class="mb-4">
+                <label for="weekly_goal_input" class="form-label fw-bold">Weekly Calorie Goal</label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-info text-white"><i class="fas fa-fire"></i></span>
+                  <input type="number" step="any" class="form-control" id="weekly_goal_input" name="weekly_goal" placeholder="Enter weekly goal" required
+                    value="{% if current_week_goal %}{{ current_week_goal.calorie_goal }}{% endif %}">
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="week_start_input" class="form-label">Week Start Date</label>
-                {% if current_week_goal %}
-                  <input type="date" class="form-control" id="week_start_input" name="week_start" required value="{{ current_week_goal.week_start|date:'Y-m-d' }}">
-                {% else %}
-                  <input type="date" class="form-control" id="week_start_input" name="week_start" required value="{{ today|date:'Y-m-d' }}">
-                {% endif %}
+              <div class="mb-4">
+                <label for="week_start_input" class="form-label fw-bold">Week Start Date</label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-info text-white"><i class="fas fa-calendar"></i></span>
+                  {% if current_week_goal %}
+                    <input type="date" class="form-control" id="week_start_input" name="week_start" required value="{{ current_week_goal.week_start|date:'Y-m-d' }}">
+                  {% else %}
+                    <input type="date" class="form-control" id="week_start_input" name="week_start" required value="{{ today|date:'Y-m-d' }}">
+                  {% endif %}
+                </div>
               </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-info">Save Weekly Goal</button>
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-info btn-lg text-white">
+                  <i class="fas fa-save me-2"></i>Save Weekly Goal
+                </button>
               </div>
             </form>
           </div>
@@ -148,29 +176,40 @@
       </div>
 
       <!-- Daily Calorie Log Entry Form -->
-      <div class="col-md-6 mb-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-warning text-dark">
-            <h4 class="mb-0">Enter Daily Calorie Log</h4>
+      <div class="col-md-6">
+        <div class="card shadow border-0 h-100">
+          <div class="card-header bg-warning text-dark py-3">
+            <h4 class="mb-0"><i class="fas fa-utensils me-2"></i>Enter Daily Calorie Log</h4>
           </div>
-          <div class="card-body">
+          <div class="card-body p-4">
             <form method="post" action="{% url 'dashboard' %}">
               {% csrf_token %}
               <input type="hidden" name="action" value="daily_log">
               <div class="mb-3">
-                <label for="log_date" class="form-label">Date</label>
-                <input type="date" class="form-control" id="log_date" name="log_date" required>
+                <label for="log_date" class="form-label fw-bold">Date</label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-warning"><i class="fas fa-calendar-day"></i></span>
+                  <input type="date" class="form-control" id="log_date" name="log_date" required>
+                </div>
               </div>
               <div class="mb-3">
-                <label for="calorie_goal_input_day" class="form-label">Daily Calorie Goal</label>
-                <input type="number" step="any" class="form-control" id="calorie_goal_input_day" name="calorie_goal" placeholder="Enter daily goal" required>
+                <label for="calorie_goal_input_day" class="form-label fw-bold">Daily Calorie Goal</label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-warning"><i class="fas fa-bullseye"></i></span>
+                  <input type="number" step="any" class="form-control" id="calorie_goal_input_day" name="calorie_goal" placeholder="Enter daily goal" required>
+                </div>
               </div>
               <div class="mb-3">
-                <label for="calories_consumed" class="form-label">Calories Consumed So Far</label>
-                <input type="number" step="any" class="form-control" id="calories_consumed" name="calories_consumed" placeholder="Enter calories consumed" required>
+                <label for="calories_consumed" class="form-label fw-bold">Calories Consumed So Far</label>
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-warning"><i class="fas fa-hamburger"></i></span>
+                  <input type="number" step="any" class="form-control" id="calories_consumed" name="calories_consumed" placeholder="Enter calories consumed" required>
+                </div>
               </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-warning">Save Daily Log</button>
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-warning btn-lg">
+                  <i class="fas fa-save me-2"></i>Save Daily Log
+                </button>
               </div>
             </form>
           </div>
@@ -178,27 +217,42 @@
       </div>
     </div>
 
+    <!-- Weekly Status -->
+    {% if weekly_status %}
+    <div class="row mt-4">
+      <div class="col">
+        <div class="alert alert-info text-center p-3">
+          <i class="fas fa-chart-line me-2"></i>
+          <strong>{{ weekly_status }}</strong>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Weekly Logs Display -->
     <div class="row mt-5">
       <div class="col">
-        <h2 class="text-center mb-4">Weekly Calorie Logs</h2>
+        <h2 class="text-center mb-4 fw-bold text-secondary">
+          <i class="fas fa-history me-2"></i>Weekly Calorie Logs
+        </h2>
+        
         {% if weekly_logs %}
           {% for week_start, logs in weekly_logs.items %}
-            <div class="card shadow-sm mb-4">
-              <div class="card-header bg-secondary text-white">
+            <div class="card shadow border-0 mb-4">
+              <div class="card-header bg-secondary text-white py-3">
                 <h5 class="mb-0">Week of {{ week_start|date:"M d, Y" }}</h5>
               </div>
-              <div class="card-body">
+              <div class="card-body p-0">
                 <div class="table-responsive">
-                  <table class="table table-bordered table-striped">
+                  <table class="table table-striped mb-0">
                     <thead class="table-dark">
                       <tr>
-                        <th>Date</th>
-                        <th>Calorie Goal</th>
-                        <th>Calories Consumed</th>
-                        <th>Predicted End-of-Day</th>
-                        <th>Difference</th>
-                        <th>Action</th>
+                        <th><i class="fas fa-calendar me-2"></i>Date</th>
+                        <th><i class="fas fa-bullseye me-2"></i>Calorie Goal</th>
+                        <th><i class="fas fa-utensils me-2"></i>Calories Consumed</th>
+                        <th><i class="fas fa-chart-line me-2"></i>Predicted End-of-Day</th>
+                        <th><i class="fas fa-balance-scale me-2"></i>Difference</th>
+                        <th><i class="fas fa-cog me-2"></i>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -210,9 +264,13 @@
                         <td>{{ log.predicted|floatformat:0 }}</td>
                         <td>
                           {% if log.difference >= 0 %}
-                            Under by {{ log.difference|floatformat:0 }}
+                            <span class="text-success">
+                              <i class="fas fa-arrow-down me-1"></i>Under by {{ log.difference|floatformat:0 }}
+                            </span>
                           {% else %}
-                            Over by {{ log.difference|abs|floatformat:0 }}
+                            <span class="text-danger">
+                              <i class="fas fa-arrow-up me-1"></i>Over by {{ log.difference|abs|floatformat:0 }}
+                            </span>
                           {% endif %}
                         </td>
                         <td>
@@ -220,7 +278,9 @@
                             {% csrf_token %}
                             <input type="hidden" name="action" value="delete_log">
                             <input type="hidden" name="log_id" value="{{ log.id }}">
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                              <i class="fas fa-trash me-1"></i>Delete
+                            </button>
                           </form>
                         </td>
                       </tr>
@@ -232,15 +292,11 @@
             </div>
           {% endfor %}
         {% else %}
-          <p class="text-center">No calorie logs yet.</p>
+          <div class="text-center py-5">
+            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+            <p class="lead">No calorie logs yet. Start tracking your calories today!</p>
+          </div>
         {% endif %}
-      </div>
-    </div>
-
-    <!-- Current Week Status -->
-    <div class="row mt-3">
-      <div class="col text-center">
-        <h4>{{ weekly_status }}</h4>
       </div>
     </div>
 
